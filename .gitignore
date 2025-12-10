@@ -1,0 +1,57 @@
+# JetBrains Rider and other IDE specific files
+.idea/
+*.iml
+*.iws
+*.ipr
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.resharper
+*.vspscc
+*.vssscc
+
+# Build artifacts
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+*.pdb
+*.pidb
+*.opendb
+*.ncb
+*.sbr
+*.bsc
+*.lib
+*.lo
+*.la
+*.dll
+*.exe
+*.o
+*.so
+*.a
+*.ilk
+*.metagen
+*.tlb
+*.tmp
+*.bak
+*.old
+*.log
+
+# NuGet packages
+packages/
+*.nupkg
+
+# Test results
+TestResults/
+
+# User-specific files
+*.user
+*.userprefs
+*.workspace
+*.cache
+
+# Other common exclusions
+Thumbs.db
+Desktop.ini
+.DS_Store
