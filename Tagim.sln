@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tagim.Api", "Tagim.Api\Tagim.Api.csproj", "{F7FE0A0F-2F22-4B5F-B4E0-96C6E2A6ECB5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{38C4D27E-9FFB-4193-A0F5-AF221B948E70}"
+	ProjectSection(SolutionItems) = preProject
+		compose.yaml = compose.yaml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tagim.Domain", "Tagim.Domain\Tagim.Domain.csproj", "{981D0889-6C91-4315-A771-FB93D4E5E475}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tagim.Application", "Tagim.Application\Tagim.Application.csproj", "{44ECEBB3-621B-405B-A156-CC7F660E4B63}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tagim.Infrastructure", "Tagim.Infrastructure\Tagim.Infrastructure.csproj", "{CADE4DB7-06DE-4DEB-8180-85F8107F3053}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F7FE0A0F-2F22-4B5F-B4E0-96C6E2A6ECB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7FE0A0F-2F22-4B5F-B4E0-96C6E2A6ECB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7FE0A0F-2F22-4B5F-B4E0-96C6E2A6ECB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7FE0A0F-2F22-4B5F-B4E0-96C6E2A6ECB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{981D0889-6C91-4315-A771-FB93D4E5E475}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{981D0889-6C91-4315-A771-FB93D4E5E475}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{981D0889-6C91-4315-A771-FB93D4E5E475}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{981D0889-6C91-4315-A771-FB93D4E5E475}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44ECEBB3-621B-405B-A156-CC7F660E4B63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44ECEBB3-621B-405B-A156-CC7F660E4B63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44ECEBB3-621B-405B-A156-CC7F660E4B63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44ECEBB3-621B-405B-A156-CC7F660E4B63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CADE4DB7-06DE-4DEB-8180-85F8107F3053}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CADE4DB7-06DE-4DEB-8180-85F8107F3053}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CADE4DB7-06DE-4DEB-8180-85F8107F3053}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CADE4DB7-06DE-4DEB-8180-85F8107F3053}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
