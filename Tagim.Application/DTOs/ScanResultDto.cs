@@ -4,5 +4,5 @@ public record ScanResultDto(
     string LicensePlate,
     string CarDescription,
     string OwnerName,
-    string ContactNumber
-    );
+    string ContactNumber,
+    IEnumerable<SocialMediaDto>? SocialLinks); 

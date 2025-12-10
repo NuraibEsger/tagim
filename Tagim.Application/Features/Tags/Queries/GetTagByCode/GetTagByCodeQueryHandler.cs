@@ -14,6 +14,7 @@ public class GetTagByCodeQueryHandler(IApplicationDbContext context) : IRequestH
         var tag = await _context.Tags
             .Include(t => t.Vehicle)
             .ThenInclude(v => v!.User)
+            .ThenInclude(u => u.SocialMediaLinks)
             .FirstOrDefaultAsync(t => t.UniqueCode == request.Code, cancellationToken);
         
         if (tag == null)
@@ -25,12 +26,18 @@ public class GetTagByCodeQueryHandler(IApplicationDbContext context) : IRequestH
         {
             throw new Exception("Bu QR kod hələ aktivləşdirilməyib.");
         }
+        
+        var socialLinks = tag.Vehicle.User.SocialMediaLinks?
+            .Where(s => s.IsVisible && !s.IsDeleted) 
+            .Select(s => new SocialMediaDto(s.PlatformName, s.Url))
+            .ToList();
 
         return new ScanResultDto(
             tag.Vehicle.LicensePlate,
             $"{tag.Vehicle.Make} {tag.Vehicle.Model} ({tag.Vehicle.Color})",
             tag.Vehicle.User.FullName,
-            tag.Vehicle.ContactNumber
+            tag.Vehicle.ContactNumber,
+            socialLinks
         );
     }
 }
