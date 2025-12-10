@@ -1,0 +1,20 @@
+# This is a generated file. Not intended for manual editing.
+services:
+  tagim.api:
+    build:
+      context: "/Users/nuraibesger/Desktop/Secret/Tagim"
+      dockerfile: "Tagim.Api/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net10.0/Tagim.Api.dll"
+    environment:
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "tagim.api:dev"
+    ports: []
+    volumes:
+    - "/Users/nuraibesger/Desktop/Secret/Tagim/Tagim.Api:/app:rw"
+    - "/Users/nuraibesger/Desktop/Secret/Tagim:/src:rw"
+    - "/Users/nuraibesger/.nuget/packages:/home/app/.nuget/packages"
+    working_dir: "/app"
