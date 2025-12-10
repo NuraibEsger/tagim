@@ -20,6 +20,9 @@ public static class InfrastructureServiceRegistration
         services.AddScoped<ITokenService, JwtTokenService>();
 
         services.AddSingleton<ITagGeneratorService, TagGeneratorService>();
+        
+        services.AddTransient<IEmailService, EmailService>();
+        
         return services;
     }
 }
