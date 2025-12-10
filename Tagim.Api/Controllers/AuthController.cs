@@ -13,29 +13,15 @@ namespace Tagim.Api.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterUserCommand command)
         {
-            try
-            {
-                var userId = await mediator.Send(command);
-                return Ok(new { UserId = userId, Message = "User created successfully" });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { Error = ex.Message });
-            }
+            var userId = await mediator.Send(command);
+            return Ok(new { UserId = userId, Message = "User created successfully" });
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginUserCommand command)
         {
-            try
-            {
-                var token = await mediator.Send(command);
-                return Ok(new { Token = token });
-            }
-            catch (Exception e)
-            {
-                return Unauthorized(new { Error = e.Message });
-            }
+            var token = await mediator.Send(command);
+            return Ok(new { Token = token });
         }
     }
 }

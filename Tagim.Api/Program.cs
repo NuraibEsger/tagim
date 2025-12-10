@@ -1,6 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Tagim.Api.Middleware;
 using Tagim.Api.Services;
 using Tagim.Application;
 using Tagim.Application.Interfaces;
@@ -16,8 +17,14 @@ public abstract class Program
 
         // Add services to the container.
         builder.Services.AddHttpContextAccessor();
+        
         builder.Services.AddAuthorization();
+        
         builder.Services.AddControllers();
+        
+        builder.Services.AddProblemDetails();
+        builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+        
         builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
         builder.Services.AddInfrastructureServices(builder.Configuration);
         builder.Services.AddApplicationServices();
@@ -56,8 +63,10 @@ public abstract class Program
         {
             app.MapOpenApi();
         }
-
-        //app.UseHttpsRedirection();
+    
+        app.UseHttpsRedirection();
+        
+        app.UseExceptionHandler();
 
         app.UseAuthorization();
         app.UseAuthorization();
