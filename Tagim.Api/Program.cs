@@ -55,6 +55,16 @@ public abstract class Program
             });
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
+        
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAll", policy =>
+            {
+                policy.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
+        });
 
         var app = builder.Build();
 
@@ -67,7 +77,11 @@ public abstract class Program
         app.UseHttpsRedirection();
         
         app.UseExceptionHandler();
-
+        
+        app.UseRouting();
+        
+        app.UseCors("AllowAll");
+        
         app.UseAuthorization();
         app.UseAuthorization();
 

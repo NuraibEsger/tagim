@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Tagim.Application.Features.Vehicles.Commands.CreateVehicle;
+using Tagim.Application.Features.Vehicles.Queries.GetMyVehicles;
 
 namespace Tagim.Api.Controllers
 {
@@ -27,6 +28,13 @@ namespace Tagim.Api.Controllers
             {
                 return BadRequest(new { Error = ex.Message });
             }
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> GetMyVehicles()
+        {
+            var vehicles = await _mediator.Send(new GetMyVehiclesQuery());
+            return Ok(vehicles);
         }
     }
 }
