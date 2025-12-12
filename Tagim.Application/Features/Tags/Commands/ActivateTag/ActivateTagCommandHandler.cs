@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Tagim.Application.Extensions;
 using Tagim.Application.Interfaces;
 
 namespace Tagim.Application.Features.Tags.Commands.ActivateTag;
@@ -12,7 +13,7 @@ public class ActivateTagCommandHandler(IApplicationDbContext context, ICurrentUs
 
     public async Task<bool> Handle(ActivateTagCommand request, CancellationToken cancellationToken)
     {
-        var userId = _currentUserService.UserId;
+        var userId = _currentUserService.GetUserIdOrThrow();
         
         var tag = await _context.Tags
             .FirstOrDefaultAsync(t => t.UniqueCode == request.UniqueCode, cancellationToken);

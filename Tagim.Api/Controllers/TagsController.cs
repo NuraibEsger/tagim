@@ -29,6 +29,7 @@ namespace Tagim.Api.Controllers
         }
 
         [HttpPost("bulk-create")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> BulkCreate([FromBody] CreateBulkTagsCommand command)
         {
             try

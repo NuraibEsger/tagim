@@ -6,12 +6,13 @@ using Tagim.Api.Services;
 using Tagim.Application;
 using Tagim.Application.Interfaces;
 using Tagim.Infrastructure;
+using Tagim.Infrastructure.Persistence;
 
 namespace Tagim.Api;
 
 public abstract class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
@@ -66,6 +67,8 @@ public abstract class Program
             });
         });
 
+        builder.Services.AddScoped<ApplicationDbContext>();
+        
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -86,7 +89,14 @@ public abstract class Program
         app.UseAuthorization();
 
         app.MapControllers();
+
+        await using (var scope = app.Services.CreateAsyncScope())
+        {
+            var initialiser = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitialiser>();
+            await initialiser.InitializeAsync();
+            await initialiser.SeedAsync();
+        }
         
-        app.Run();
+        await app.RunAsync();
     }
 }

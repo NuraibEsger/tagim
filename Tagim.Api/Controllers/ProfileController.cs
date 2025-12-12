@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Tagim.Application.Features.Profile.Commands.AddSocialLink;
+using Tagim.Application.Features.Profile.Commands.UpdateProfile;
 
 namespace Tagim.Api.Controllers
 {
@@ -22,6 +23,13 @@ namespace Tagim.Api.Controllers
             {
                 return BadRequest(new { Error = ex.Message });
             }
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileCommand command)
+        {
+            await _mediator.Send(command);
+            return Ok(new { Message = "Profil məlumatları uğurla yeniləndi!" });
         }
     }
 }

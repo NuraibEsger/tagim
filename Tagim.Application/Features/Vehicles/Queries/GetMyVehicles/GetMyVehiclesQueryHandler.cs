@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Tagim.Application.DTOs;
+using Tagim.Application.Extensions;
 using Tagim.Application.Interfaces;
 
 namespace Tagim.Application.Features.Vehicles.Queries.GetMyVehicles;
@@ -13,8 +14,7 @@ public class GetMyVehiclesQueryHandler(IApplicationDbContext context, ICurrentUs
 
     public async Task<List<VehicleDto>> Handle(GetMyVehiclesQuery request, CancellationToken cancellationToken)
     {
-        var userId = _currentUserService.UserId;
-        if (userId == null) throw new UnauthorizedAccessException();
+        var userId = _currentUserService.GetUserIdOrThrow();
 
         var vehicles = await _context.Vehicles
             .Where(v => v.UserId == userId && !v.IsDeleted)

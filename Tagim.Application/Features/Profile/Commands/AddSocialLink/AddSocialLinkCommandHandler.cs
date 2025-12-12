@@ -1,4 +1,5 @@
 using MediatR;
+using Tagim.Application.Extensions;
 using Tagim.Application.Interfaces;
 using Tagim.Domain.Common;
 
@@ -12,12 +13,11 @@ public class AddSocialLinkCommandHandler(IApplicationDbContext context, ICurrent
 
     public async Task<int> Handle(AddSocialLinkCommand request, CancellationToken cancellationToken)
     {
-        var userId = _currentUserService.UserId;
-        if (userId == null) throw new UnauthorizedAccessException();
+        var userId = _currentUserService.GetUserIdOrThrow();
 
         var link = new SocialMediaLink
         {
-            UserId = userId.Value,
+            UserId = userId,
             PlatformName = request.PlatformName,
             Url = request.Url,
             IsVisible = true
