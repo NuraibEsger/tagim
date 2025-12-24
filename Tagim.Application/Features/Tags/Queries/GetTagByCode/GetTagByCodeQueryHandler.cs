@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Tagim.Application.DTOs;
+using Tagim.Application.Exceptions;
 using Tagim.Application.Interfaces;
 
 namespace Tagim.Application.Features.Tags.Queries.GetTagByCode;
@@ -19,12 +20,12 @@ public class GetTagByCodeQueryHandler(IApplicationDbContext context) : IRequestH
         
         if (tag == null)
         {
-            throw new Exception("QR Kod tapılmadı.");
+            throw new NotFoundException("QR Kod tapılmadı.");
         }
 
         if (!tag.IsActive || tag.Vehicle == null)
         {
-            throw new Exception("Bu QR kod hələ aktivləşdirilməyib.");
+            throw new NotFoundException("Bu QR kod hələ aktivləşdirilməyib.");
         }
         
         var socialLinks = tag.Vehicle.User.SocialMediaLinks?

@@ -23,6 +23,10 @@ public static class InfrastructureServiceRegistration
         
         services.AddTransient<IEmailService, EmailService>();
         
+        services.AddScoped<IFileStorageService, LocalFileStorageService>();
+
+        services.AddScoped<ApplicationDbContextInitialiser>();
+        
         return services;
     }
 }

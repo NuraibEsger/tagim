@@ -10,8 +10,6 @@ public class UpdateProfileCommandHandler(IApplicationDbContext context, ICurrent
 {
     private readonly IApplicationDbContext _context = context;
     private readonly ICurrentUserService _currentUserService = currentUserService;
-
-
     public async Task<bool> Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
     {
         var userId = _currentUserService.GetUserIdOrThrow();

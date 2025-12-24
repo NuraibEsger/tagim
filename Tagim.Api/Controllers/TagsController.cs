@@ -17,45 +17,24 @@ namespace Tagim.Api.Controllers
         [HttpPost("activate")]
         public async Task<IActionResult> Handle(ActivateTagCommand request)
         {
-            try
-            {
-                await _mediator.Send(request);
-                return Ok(new { Message = "Stiker uğurla aktivləşdirildi! Artıq maşınınız qorunur." });
-            }
-            catch (Exception e)
-            {
-                return BadRequest(new { Message = e.Message });
-            }
+            await _mediator.Send(request);
+            return Ok(new { Message = "Stiker uğurla aktivləşdirildi! Artıq maşınınız qorunur." });
         }
 
         [HttpPost("bulk-create")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> BulkCreate([FromBody] CreateBulkTagsCommand command)
         {
-            try
-            {
-                var count = await _mediator.Send(command);
-                return Ok(new { Message = $"{count} ədəd yeni stiker uğurla yaradıldı!" });
-            }
-            catch (Exception e)
-            {
-                return BadRequest(new { Message = e.Message });
-            }
+            var count = await _mediator.Send(command);
+            return Ok(new { Message = $"{count} ədəd yeni stiker uğurla yaradıldı!" });
         }
 
         [HttpGet("code")]
         [AllowAnonymous]
         public async Task<IActionResult> GetTagInfo(string code)
         {
-            try
-            {
-                var result = await _mediator.Send(new GetTagByCodeQuery(code));
-                return Ok(result);
-            }
-            catch (Exception e)
-            {
-                return NotFound(new { Error = e.Message });
-            }
+            var result = await _mediator.Send(new GetTagByCodeQuery(code));
+            return Ok(result);
         }
     }
 }

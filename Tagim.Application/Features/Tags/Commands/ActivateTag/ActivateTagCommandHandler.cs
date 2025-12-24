@@ -29,7 +29,7 @@ public class ActivateTagCommandHandler(IApplicationDbContext context, ICurrentUs
         }
         
         var vehicle = await _context.Vehicles
-            .FirstOrDefaultAsync(v => v.Id == request.VehicleId && v.UserId == userId, cancellationToken);
+            .FirstOrDefaultAsync(v => v.PublicId == request.VehiclePublicId && v.UserId == userId, cancellationToken);
         
         if (vehicle == null)
         {
