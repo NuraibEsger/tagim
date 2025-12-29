@@ -85,7 +85,7 @@ public abstract class Program
             app.UseSwaggerUI();
         }
     
-        app.UseHttpsRedirection();
+        //app.UseHttpsRedirection();
         
         app.UseStaticFiles();
         

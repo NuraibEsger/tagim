@@ -21,6 +21,7 @@ public class GetMyVehiclesQueryHandler(IApplicationDbContext context, ICurrentUs
             .OrderByDescending(v => v.CreatedAt)
             .Select(v => new VehicleDto(
                 v.Id,
+                v.PublicId,
                 v.LicensePlate,
                 v.Make,
                 v.Model,

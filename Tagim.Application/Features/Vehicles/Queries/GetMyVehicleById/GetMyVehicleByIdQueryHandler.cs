@@ -25,6 +25,7 @@ public class GetMyVehicleByIdQueryHandler(IApplicationDbContext context, ICurren
         
         return new VehicleDto(
             vehicle.Id,
+            vehicle.PublicId,
             vehicle.LicensePlate,
             vehicle.Make,
             vehicle.Model,
