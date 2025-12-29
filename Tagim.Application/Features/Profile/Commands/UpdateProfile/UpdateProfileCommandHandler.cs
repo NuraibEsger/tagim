@@ -14,7 +14,7 @@ public class UpdateProfileCommandHandler(IApplicationDbContext context, ICurrent
     {
         var userId = _currentUserService.GetUserIdOrThrow();
         
-        var user = await _context.Users.FindAsync(new object[] { userId }, cancellationToken);
+        var user = await _context.Users.FindAsync([userId], cancellationToken);
         
         if (user == null)
         {

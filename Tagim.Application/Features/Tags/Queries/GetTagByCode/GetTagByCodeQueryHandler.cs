@@ -29,7 +29,7 @@ public class GetTagByCodeQueryHandler(IApplicationDbContext context) : IRequestH
         }
         
         var socialLinks = tag.Vehicle.User.SocialMediaLinks?
-            .Where(s => s.IsVisible && !s.IsDeleted) 
+            .Where(s => s.IsVisible) 
             .Select(s => new SocialMediaDto(s.PlatformName, s.Url))
             .ToList();
 

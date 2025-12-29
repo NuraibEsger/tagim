@@ -1,11 +1,12 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using Tagim.Application.Extensions;
 using Tagim.Application.Interfaces;
 using Tagim.Domain.Common;
 
 namespace Tagim.Infrastructure.Persistence;
 
-public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : 
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) :
     DbContext(options), IApplicationDbContext
 {
     public DbSet<Vehicle> Vehicles { get; set; }
@@ -16,21 +17,39 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        modelBuilder.Entity<BaseEntity>().HasQueryFilter(b => !b.IsDeleted);
+
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            if (typeof(BaseEntity).IsAssignableFrom(entityType.ClrType))
+            {
+                modelBuilder.Entity(entityType.ClrType).AddQueryFilterToAll();
+            }
+        }
+        
         base.OnModelCreating(modelBuilder);
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
-        ChangeTracker.DetectChanges();
-        foreach (var item in ChangeTracker
-                     .Entries<BaseEntity>()
-                     .Where(e => e.State == EntityState.Deleted))
+        foreach (var entry in ChangeTracker.Entries<BaseEntity>())
         {
-            item.State = EntityState.Modified;
-            item.Entity.IsDeleted = true;
+            switch (entry.State)
+            {
+                case EntityState.Deleted:
+                    entry.State = EntityState.Modified;
+                    entry.Entity.IsDeleted = true;
+                    entry.Entity.DeletedAt = DateTime.UtcNow;
+                    break;
+                
+                case EntityState.Added:
+                    entry.Entity.CreatedAt = DateTime.UtcNow;
+                    break;
+                case EntityState.Modified:
+                    entry.Entity.UpdatedAt = DateTime.UtcNow;
+                    break;
+            }
         }
-        
+
         return await base.SaveChangesAsync(cancellationToken);
     }
 }
