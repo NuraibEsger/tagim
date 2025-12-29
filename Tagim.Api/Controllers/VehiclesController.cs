@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Tagim.Application.Features.Vehicles.Commands.CreateVehicle;
+using Tagim.Application.Features.Vehicles.Commands.DeleteVehicle;
 using Tagim.Application.Features.Vehicles.Commands.UpdateVehicle;
 using Tagim.Application.Features.Vehicles.Commands.UploadVehicleImage;
 using Tagim.Application.Features.Vehicles.Queries.GetMyVehicleById;
@@ -58,6 +59,13 @@ namespace Tagim.Api.Controllers
         {
             var vehicle = await _mediator.Send(new GetPublicVehicleQuery(publicId));
             return Ok(vehicle);
+        }
+
+        [HttpDelete("vehicle/{publicId}")]
+        public async Task<IActionResult> DeleteVehicleById(DeleteVehicleCommand command)
+        {
+            var vehicle = await _mediator.Send(command);
+            return Ok(new { Message = "Avtomobil məlumatları uğurla silindi."});
         }
     }
 }
