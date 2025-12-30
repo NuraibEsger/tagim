@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Tagim.Application.Exceptions;
 using Tagim.Application.Extensions;
 using Tagim.Application.Interfaces;
 
@@ -20,7 +21,7 @@ public class ActivateTagCommandHandler(IApplicationDbContext context, ICurrentUs
  
         if (tag == null)
         {
-            throw new Exception("Yanlış kod! Belə bir stiker mövcud deyil.");
+            throw new NotFoundException("Yanlış kod! Belə bir stiker mövcud deyil.");
         }
 
         if (tag.IsActive || tag.VehicleId != null)
@@ -29,11 +30,11 @@ public class ActivateTagCommandHandler(IApplicationDbContext context, ICurrentUs
         }
         
         var vehicle = await _context.Vehicles
-            .FirstOrDefaultAsync(v => v.Id == request.VehicleId && v.UserId == userId, cancellationToken);
+            .FirstOrDefaultAsync(v => v.PublicId == request.VehiclePublicId && v.UserId == userId, cancellationToken);
         
         if (vehicle == null)
         {
-            throw new Exception("Maşın tapılmadı və ya sizə aid deyil.");
+            throw new NotFoundException("Maşın tapılmadı və ya sizə aid deyil.");
         }
         
         tag.VehicleId = vehicle.Id;

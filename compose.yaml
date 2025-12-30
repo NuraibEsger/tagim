@@ -12,6 +12,8 @@
       - "8080:8080"
     depends_on:
       - db
+    volumes:
+      - ./Tagim.Api/wwwroot/uploads:/app/wwwroot/uploads
 
   db:
     image: postgres:16

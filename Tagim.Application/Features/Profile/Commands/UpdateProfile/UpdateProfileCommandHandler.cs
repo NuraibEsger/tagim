@@ -10,13 +10,11 @@ public class UpdateProfileCommandHandler(IApplicationDbContext context, ICurrent
 {
     private readonly IApplicationDbContext _context = context;
     private readonly ICurrentUserService _currentUserService = currentUserService;
-
-
     public async Task<bool> Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
     {
         var userId = _currentUserService.GetUserIdOrThrow();
         
-        var user = await _context.Users.FindAsync(new object[] { userId }, cancellationToken);
+        var user = await _context.Users.FindAsync([userId], cancellationToken);
         
         if (user == null)
         {

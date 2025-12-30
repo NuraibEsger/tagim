@@ -1,6 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 using Tagim.Api.Middleware;
 using Tagim.Api.Services;
 using Tagim.Application;
@@ -68,6 +69,11 @@ public abstract class Program
         });
 
         builder.Services.AddScoped<ApplicationDbContext>();
+
+        builder.Services.AddSwaggerGen(options =>
+        {
+            options.SwaggerDoc("v1", new() { Title = "Tagim API", Version = "v1" });
+        });
         
         var app = builder.Build();
 
@@ -75,9 +81,13 @@ public abstract class Program
         if (app.Environment.IsDevelopment())
         {
             app.MapOpenApi();
+            app.UseSwagger();
+            app.UseSwaggerUI();
         }
     
-        app.UseHttpsRedirection();
+        //app.UseHttpsRedirection();
+        
+        app.UseStaticFiles();
         
         app.UseExceptionHandler();
         
@@ -89,7 +99,7 @@ public abstract class Program
         app.UseAuthorization();
 
         app.MapControllers();
-
+        
         await using (var scope = app.Services.CreateAsyncScope())
         {
             var initialiser = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitialiser>();

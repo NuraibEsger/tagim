@@ -17,15 +17,17 @@ public class GetMyVehiclesQueryHandler(IApplicationDbContext context, ICurrentUs
         var userId = _currentUserService.GetUserIdOrThrow();
 
         var vehicles = await _context.Vehicles
-            .Where(v => v.UserId == userId && !v.IsDeleted)
+            .Where(v => v.UserId == userId)
             .OrderByDescending(v => v.CreatedAt)
             .Select(v => new VehicleDto(
                 v.Id,
+                v.PublicId,
                 v.LicensePlate,
                 v.Make,
                 v.Model,
                 v.Color,
-                v.ContactNumber
+                v.ContactNumber,
+                v.VehicleImageUrl
             )).ToListAsync(cancellationToken);
         
         return vehicles;

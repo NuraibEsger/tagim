@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Tagim.Application.Features.Profile.Commands.AddSocialLink;
 using Tagim.Application.Features.Profile.Commands.UpdateProfile;
+using Tagim.Application.Features.Profile.Commands.UploadProfileImage;
 
 namespace Tagim.Api.Controllers
 {
@@ -11,18 +12,12 @@ namespace Tagim.Api.Controllers
     public class ProfileController(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
+
         [HttpPost("social-links")]
         public async Task<IActionResult> AddSocialLink([FromBody] AddSocialLinkCommand command)
         {
-            try
-            {
-                var id = await _mediator.Send(command);
-                return Ok(new { Id = id, Message = "Sosial media linki əlavə edildi." });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { Error = ex.Message });
-            }
+            var id = await _mediator.Send(command);
+            return Ok(new { Id = id, Message = "Sosial media linki əlavə edildi." });
         }
 
         [HttpPut]
@@ -30,6 +25,13 @@ namespace Tagim.Api.Controllers
         {
             await _mediator.Send(command);
             return Ok(new { Message = "Profil məlumatları uğurla yeniləndi!" });
+        }
+
+        [HttpPost("upload-image")]
+        public async Task<IActionResult> UploadImage([FromForm] UploadProfileImageCommand command)
+        {
+            var path = await _mediator.Send(command);
+            return Ok(new { ImageUrl = path });
         }
     }
 }

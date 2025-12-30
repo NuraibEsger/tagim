@@ -18,18 +18,20 @@ public class GetMyVehicleByIdQueryHandler(IApplicationDbContext context, ICurren
         var userId = _currentUserService.GetUserIdOrThrow();
         
         var vehicle = await _context.Vehicles
-            .FirstOrDefaultAsync(v => v.Id == request.Id && !v.IsDeleted,  cancellationToken);
+            .FirstOrDefaultAsync(v => v.Id == request.Id && v.UserId == userId,  cancellationToken);
         
         if (vehicle == null)
             throw new NotFoundException("Avtomobil tapılmadı.");     
         
         return new VehicleDto(
             vehicle.Id,
+            vehicle.PublicId,
             vehicle.LicensePlate,
             vehicle.Make,
             vehicle.Model,
             vehicle.Color,
-            vehicle.ContactNumber
+            vehicle.ContactNumber,
+            vehicle.VehicleImageUrl
         );
     }
 }
