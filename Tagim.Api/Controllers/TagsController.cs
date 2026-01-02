@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Tagim.Application.Features.Tags.Commands.ActivateTag;
 using Tagim.Application.Features.Tags.Commands.CreateBulkTags;
 using Tagim.Application.Features.Tags.Queries.GetTagByCode;
+using Tagim.Application.Features.Tags.Queries.ScanTag;
 
 namespace Tagim.Api.Controllers
 {
@@ -34,6 +35,13 @@ namespace Tagim.Api.Controllers
         public async Task<IActionResult> GetTagInfo(string code)
         {
             var result = await _mediator.Send(new GetTagByCodeQuery(code));
+            return Ok(result);
+        }
+        
+        [HttpGet("scan/{code}")]
+        public async Task<IActionResult> Scan(string code)
+        {
+            var result = await _mediator.Send(new ScanTagQuery(code));
             return Ok(result);
         }
     }
