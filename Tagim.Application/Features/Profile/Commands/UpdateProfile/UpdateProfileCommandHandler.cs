@@ -22,7 +22,7 @@ public class UpdateProfileCommandHandler(IApplicationDbContext context, ICurrent
         }
         
         user.FullName = request.FullName;
-        user.PhoneNumber = request.PhoneNumber;
+        user.PhoneNumber = request.PhoneNumber.Trim();
         user.UpdatedAt = DateTime.UtcNow;
 
         await _context.SaveChangesAsync(cancellationToken);
