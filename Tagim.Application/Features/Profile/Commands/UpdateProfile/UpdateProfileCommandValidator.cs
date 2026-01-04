@@ -11,7 +11,7 @@ public class UpdateProfileCommandValidator : AbstractValidator<UpdateProfileComm
             .MinimumLength(3).WithMessage("Ad çox qısadır.")
             .MaximumLength(50).WithMessage("Ad 50 simvoldan çox ola bilməz.");
 
-        RuleFor(x => x.PhoneNumber)
+        RuleFor(x => x.PhoneNumber.Trim())
             .NotEmpty().WithMessage("Telefon nömrəsi daxil edilməlidir.")
             .Matches(@"^(\+994|994|0)(50|51|55|60|70|77|99)[0-9]{7}$")
             .WithMessage("Düzgün Azərbaycan nömrəsi daxil edin (məs: 0501234567).");
