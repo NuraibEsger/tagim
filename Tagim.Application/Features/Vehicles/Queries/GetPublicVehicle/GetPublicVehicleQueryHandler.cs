@@ -22,7 +22,8 @@ public class GetPublicVehicleQueryHandler(IApplicationDbContext context)
         if (vehicle == null) throw new NotFoundException("Avtomobil tapılmadı.");
         
         var socialMediaLinks = vehicle.User.SocialMediaLinks?
-            .Select(s => new SocialMediaDto(s.PlatformName, s.Url)).ToList() ?? new List<SocialMediaDto>();
+            .Where(s => s.IsVisible)
+            .Select(s => new SocialMediaDto(s.PlatformName, s.Url, true)).ToList() ?? new List<SocialMediaDto>();
         
         return new PublicVehicleDto(
             vehicle.Make,
