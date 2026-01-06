@@ -31,7 +31,8 @@ public class GetMyVehicleByIdQueryHandler(IApplicationDbContext context, ICurren
             vehicle.Model,
             vehicle.Color,
             vehicle.ContactNumber,
-            vehicle.VehicleImageUrl
+            vehicle.VehicleImageUrl,
+            vehicle.UserId
         );
     }
 }

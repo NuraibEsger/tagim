@@ -27,7 +27,8 @@ public class GetMyVehiclesQueryHandler(IApplicationDbContext context, ICurrentUs
                 v.Model,
                 v.Color,
                 v.ContactNumber,
-                v.VehicleImageUrl
+                v.VehicleImageUrl,
+                v.UserId
             )).ToListAsync(cancellationToken);
         
         return vehicles;

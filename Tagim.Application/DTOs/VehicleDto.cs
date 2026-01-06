@@ -8,5 +8,6 @@ public record VehicleDto(
     string Model,
     string Color,
     string ContactNumber,
-    string? VehicleImageUrl
+    string? VehicleImageUrl,
+    int UserId
 );

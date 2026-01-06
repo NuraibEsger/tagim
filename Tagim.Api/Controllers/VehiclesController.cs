@@ -61,7 +61,7 @@ namespace Tagim.Api.Controllers
             return Ok(vehicle);
         }
 
-        [HttpDelete("vehicle/{publicId}")]
+        [HttpDelete("{publicId}")]
         public async Task<IActionResult> DeleteVehicleById(DeleteVehicleCommand command)
         {
             var vehicle = await _mediator.Send(command);
