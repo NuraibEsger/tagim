@@ -17,6 +17,7 @@ public class GetMyVehiclesQueryHandler(IApplicationDbContext context, ICurrentUs
         var userId = _currentUserService.GetUserIdOrThrow();
 
         var vehicles = await _context.Vehicles
+            .AsNoTracking()
             .Where(v => v.UserId == userId)
             .OrderByDescending(v => v.CreatedAt)
             .Select(v => new VehicleDto(

@@ -18,6 +18,7 @@ public class GetMyVehicleByIdQueryHandler(IApplicationDbContext context, ICurren
         var userId = _currentUserService.GetUserIdOrThrow();
         
         var vehicle = await _context.Vehicles
+            .AsNoTracking()
             .FirstOrDefaultAsync(v => v.Id == request.Id && v.UserId == userId,  cancellationToken);
         
         if (vehicle == null)

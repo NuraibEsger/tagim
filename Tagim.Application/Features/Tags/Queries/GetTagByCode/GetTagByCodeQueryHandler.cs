@@ -13,6 +13,7 @@ public class GetTagByCodeQueryHandler(IApplicationDbContext context) : IRequestH
     public async Task<ScanResultDto> Handle(GetTagByCodeQuery request, CancellationToken cancellationToken)
     {
         var tag = await _context.Tags
+            .AsNoTracking()
             .Include(t => t.Vehicle)
             .ThenInclude(v => v!.User)
             .ThenInclude(u => u.SocialMediaLinks)

@@ -14,6 +14,7 @@ public class GetPublicVehicleQueryHandler(IApplicationDbContext context)
     public async Task<PublicVehicleDto> Handle(GetPublicVehicleQuery request, CancellationToken cancellationToken)
     {
         var vehicle = await _context.Vehicles
+            .AsNoTracking()
             .Include(v => v.User)  
             .ThenInclude(v => v.SocialMediaLinks)
             .AsNoTracking()
