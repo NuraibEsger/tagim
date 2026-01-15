@@ -15,7 +15,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
 
         var problemDetails = new ProblemDetails
         {
-            Instance = httpContext.Request.Path
+            Instance = httpContext.Request.Path,
         };
         
         // 1. FluentValidation
@@ -50,7 +50,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
             httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
             problemDetails.Title = "Server Xətası";
             problemDetails.Status = StatusCodes.Status500InternalServerError;
-            problemDetails.Detail = "Daxili xəta baş verdi. Zəhmət olmasa adminlə əlaqə saxlayın.";
+            problemDetails.Detail = exception.Message;
         }
         
         await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
