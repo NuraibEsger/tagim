@@ -22,7 +22,11 @@ public class GetMyVehicleByIdQueryHandler(IApplicationDbContext context, ICurren
             .FirstOrDefaultAsync(v => v.Id == request.Id && v.UserId == userId,  cancellationToken);
         
         if (vehicle == null)
-            throw new NotFoundException("Avtomobil tapılmadı.");     
+            throw new NotFoundException("Avtomobil tapılmadı.");
+
+        var socialMedialLinks = vehicle.User.SocialMediaLinks?
+            .Where(s => s.IsVisible)
+            .Select(s => new SocialMediaDto(s.PlatformName, s.Url, true)).ToList() ?? new List<SocialMediaDto>();
         
         return new VehicleDto(
             vehicle.Id,
@@ -33,7 +37,8 @@ public class GetMyVehicleByIdQueryHandler(IApplicationDbContext context, ICurren
             vehicle.Color,
             vehicle.ContactNumber,
             vehicle.VehicleImageUrl,
-            vehicle.UserId
+            vehicle.UserId,
+            socialMedialLinks
         );
     }
 }

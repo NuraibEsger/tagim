@@ -1,3 +1,5 @@
+using Tagim.Domain.Common;
+
 namespace Tagim.Application.DTOs;
 
 public record VehicleDto(
@@ -9,5 +11,6 @@ public record VehicleDto(
     string Color,
     string ContactNumber,
     string? VehicleImageUrl,
-    int UserId
+    int UserId,
+    List<SocialMediaDto>? SocialMedia
 );

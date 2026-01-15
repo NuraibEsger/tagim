@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Tagim.Application.DTOs;
 using Tagim.Application.Extensions;
 using Tagim.Application.Interfaces;
+using Tagim.Domain.Common;
 
 namespace Tagim.Application.Features.Vehicles.Queries.GetMyVehicles;
 
@@ -29,7 +30,14 @@ public class GetMyVehiclesQueryHandler(IApplicationDbContext context, ICurrentUs
                 v.Color,
                 v.ContactNumber,
                 v.VehicleImageUrl,
-                v.UserId
+                v.UserId,
+                (v.User.SocialMediaLinks ?? Enumerable.Empty<SocialMediaLink>())
+                    .Where(sm => sm.IsVisible)
+                    .Select(sm => new SocialMediaDto(
+                        sm.PlatformName, 
+                        sm.Url, 
+                        sm.IsVisible
+                    )).ToList()
             )).ToListAsync(cancellationToken);
         
         return vehicles;
