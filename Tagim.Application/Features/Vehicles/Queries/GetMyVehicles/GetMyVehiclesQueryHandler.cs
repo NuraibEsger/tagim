@@ -10,14 +10,11 @@ namespace Tagim.Application.Features.Vehicles.Queries.GetMyVehicles;
 public class GetMyVehiclesQueryHandler(IApplicationDbContext context, ICurrentUserService currentUserService)
     : IRequestHandler<GetMyVehiclesQuery, List<VehicleDto>>
 {
-    private readonly IApplicationDbContext _context = context;
-    private readonly ICurrentUserService _currentUserService = currentUserService;
-
     public async Task<List<VehicleDto>> Handle(GetMyVehiclesQuery request, CancellationToken cancellationToken)
     {
-        var userId = _currentUserService.GetUserIdOrThrow();
+        var userId = currentUserService.GetUserIdOrThrow();
 
-        var vehicles = await _context.Vehicles
+        var vehicles = await context.Vehicles
             .AsNoTracking()
             .Where(v => v.UserId == userId)
             .OrderByDescending(v => v.CreatedAt)

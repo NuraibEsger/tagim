@@ -8,9 +8,6 @@ public class CreateBulkTagsCommandHandler(
     IApplicationDbContext context, 
     ITagGeneratorService tagGenerator) : IRequestHandler<CreateBulkTagsCommand, int>
 {
-    private readonly IApplicationDbContext _context = context;
-    private readonly ITagGeneratorService _tagGenerator = tagGenerator;
-    
     public async Task<int> Handle(CreateBulkTagsCommand request, CancellationToken cancellationToken)
     {
         var newTags = new List<Tag>();
@@ -19,15 +16,15 @@ public class CreateBulkTagsCommandHandler(
         {
             newTags.Add(new Tag
             {
-                UniqueCode = _tagGenerator.GenerateTags(), 
+                UniqueCode = tagGenerator.GenerateTags(), 
                 IsActive = false,                  
                 VehicleId = null,                
                 CreatedAt = DateTime.UtcNow
             });
         }
         
-        await _context.Tags.AddRangeAsync(newTags, cancellationToken);
-        await _context.SaveChangesAsync(cancellationToken);
+        await context.Tags.AddRangeAsync(newTags, cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
 
         return newTags.Count;
     }

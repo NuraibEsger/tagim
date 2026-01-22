@@ -13,12 +13,10 @@ namespace Tagim.Api.Controllers
     [ApiController]
     public class TagsController(IMediator mediator) : ControllerBase
     {
-        private readonly IMediator _mediator = mediator;
-
         [HttpPost("activate")]
         public async Task<IActionResult> Handle(ActivateTagCommand request)
         {
-            await _mediator.Send(request);
+            await mediator.Send(request);
             return Ok(new { Message = "Stiker uğurla aktivləşdirildi! Artıq maşınınız qorunur." });
         }
 
@@ -26,7 +24,7 @@ namespace Tagim.Api.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> BulkCreate([FromBody] CreateBulkTagsCommand command)
         {
-            var count = await _mediator.Send(command);
+            var count = await mediator.Send(command);
             return Ok(new { Message = $"{count} ədəd yeni stiker uğurla yaradıldı!" });
         }
 
@@ -34,14 +32,14 @@ namespace Tagim.Api.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetTagInfo(string code)
         {
-            var result = await _mediator.Send(new GetTagByCodeQuery(code));
+            var result = await mediator.Send(new GetTagByCodeQuery(code));
             return Ok(result);
         }
         
         [HttpGet("scan/{code}")]
         public async Task<IActionResult> Scan(string code)
         {
-            var result = await _mediator.Send(new ScanTagQuery(code));
+            var result = await mediator.Send(new ScanTagQuery(code));
             return Ok(result);
         }
     }

@@ -9,11 +9,9 @@ namespace Tagim.Application.Features.Vehicles.Queries.GetPublicVehicle;
 public class GetPublicVehicleQueryHandler(IApplicationDbContext context)
     : IRequestHandler<GetPublicVehicleQuery, PublicVehicleDto>
 {
-    private readonly IApplicationDbContext _context = context;
-
     public async Task<PublicVehicleDto> Handle(GetPublicVehicleQuery request, CancellationToken cancellationToken)
     {
-        var vehicle = await _context.Vehicles
+        var vehicle = await context.Vehicles
             .AsNoTracking()
             .Include(v => v.User)  
             .ThenInclude(v => v.SocialMediaLinks)

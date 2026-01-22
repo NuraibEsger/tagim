@@ -10,15 +10,11 @@ public class CreateVehicleCommandHandler(
     IApplicationDbContext context, 
     ICurrentUserService currentUserService) : IRequestHandler<CreateVehicleCommand, int>
 {
-    private readonly IApplicationDbContext _context = context;
-    private readonly ICurrentUserService _currentUserService = currentUserService;
-
-
     public async Task<int> Handle(CreateVehicleCommand request, CancellationToken cancellationToken)
     {
-        var userId = _currentUserService.GetUserIdOrThrow();
+        var userId = currentUserService.GetUserIdOrThrow();
         
-        var exists = await _context.Vehicles
+        var exists = await context.Vehicles
             .AnyAsync(v => v.LicensePlate == request.LicensePlate, cancellationToken);
 
         if (exists)
@@ -36,8 +32,8 @@ public class CreateVehicleCommandHandler(
             ContactNumber = request.ContactNumber
         };
         
-        _context.Vehicles.Add(vehicle);
-        await _context.SaveChangesAsync(cancellationToken);
+        context.Vehicles.Add(vehicle);
+        await context.SaveChangesAsync(cancellationToken);
         
         return vehicle.Id;
     }

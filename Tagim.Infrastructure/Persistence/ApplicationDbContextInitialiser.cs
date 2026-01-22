@@ -9,21 +9,18 @@ public class ApplicationDbContextInitialiser(
     ApplicationDbContext context,
     ILogger<ApplicationDbContextInitialiser> logger)
 {
-    private readonly ApplicationDbContext _context = context;
-    private readonly ILogger<ApplicationDbContextInitialiser> _logger = logger;
-
     public async Task InitializeAsync()
     {
         try
         {
-            if (_context.Database.IsNpgsql())
+            if (context.Database.IsNpgsql())
             {
-                await _context.Database.MigrateAsync();
+                await context.Database.MigrateAsync();
             }
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Verilənlər bazası başladılarkən xəta baş verdi.");
+            logger.LogError(ex, "Verilənlər bazası başladılarkən xəta baş verdi.");
             throw;
         }
     }
@@ -36,14 +33,14 @@ public class ApplicationDbContextInitialiser(
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Məlumatlar doldurularkən (Seeding) xəta baş verdi.");
+            logger.LogError(ex, "Məlumatlar doldurularkən (Seeding) xəta baş verdi.");
             throw;
         }
     }
 
     private async Task TrySeedAsync()
     {
-        if (!await _context.Users.AnyAsync())
+        if (!await context.Users.AnyAsync())
         {
             var admin = new User
             {
@@ -56,8 +53,8 @@ public class ApplicationDbContextInitialiser(
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin123!"),
             };
             
-            await _context.Users.AddAsync(admin);
-            await _context.SaveChangesAsync();
+            await context.Users.AddAsync(admin);
+            await context.SaveChangesAsync();
         }
     }
 }

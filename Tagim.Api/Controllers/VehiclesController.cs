@@ -16,40 +16,38 @@ namespace Tagim.Api.Controllers
     [ApiController]
     public class VehiclesController(IMediator mediator) : ControllerBase
     {
-        private readonly IMediator _mediator = mediator;
-
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateVehicleCommand command)
         {
-            var vehicleId = await _mediator.Send(command);
+            var vehicleId = await mediator.Send(command);
             return Ok(new { VehicleId = vehicleId, Message = "Vehicle created successfully" });
         }
 
         [HttpGet]
         public async Task<IActionResult> GetMyVehicles()
         {
-            var vehicles = await _mediator.Send(new GetMyVehiclesQuery());
+            var vehicles = await mediator.Send(new GetMyVehiclesQuery());
             return Ok(vehicles);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetVehicleById(int id)
         {
-            var vehicle = await _mediator.Send(new GetMyVehicleByIdQuery(id));
+            var vehicle = await mediator.Send(new GetMyVehicleByIdQuery(id));
             return Ok(vehicle);
         }
 
         [HttpPost("upload-image")]
         public async Task<IActionResult> UploadVehicleImage([FromForm] UploadVehicleImageCommand command)
         {
-            var path = await _mediator.Send(command);
+            var path = await mediator.Send(command);
             return Ok(new { ImageUrl = path });
         }
         
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] UpdateVehicleCommand command)
         {
-            await _mediator.Send(command);
+            await mediator.Send(command);
             return Ok(new { Message = "Avtomobil məlumatları yeniləndi!" });
         }
         
@@ -57,14 +55,14 @@ namespace Tagim.Api.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetVehicleByPublicId(Guid publicId)
         {
-            var vehicle = await _mediator.Send(new GetPublicVehicleQuery(publicId));
+            var vehicle = await mediator.Send(new GetPublicVehicleQuery(publicId));
             return Ok(vehicle);
         }
 
         [HttpDelete("{publicId}")]
         public async Task<IActionResult> DeleteVehicleById(DeleteVehicleCommand command)
         {
-            var vehicle = await _mediator.Send(command);
+            var vehicle = await mediator.Send(command);
             return Ok(new { Message = "Avtomobil məlumatları uğurla silindi."});
         }
     }

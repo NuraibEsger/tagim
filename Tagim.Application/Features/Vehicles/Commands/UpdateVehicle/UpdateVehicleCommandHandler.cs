@@ -9,14 +9,11 @@ namespace Tagim.Application.Features.Vehicles.Commands.UpdateVehicle;
 public class UpdateVehicleCommandHandler(IApplicationDbContext context, ICurrentUserService currentUserService)
     : IRequestHandler<UpdateVehicleCommand, Unit>
 {
-    private readonly IApplicationDbContext _context = context;
-    private readonly ICurrentUserService _currentUserService = currentUserService;
-
     public async Task<Unit> Handle(UpdateVehicleCommand request, CancellationToken cancellationToken)
     {
-        var userId = _currentUserService.GetUserIdOrThrow();
+        var userId = currentUserService.GetUserIdOrThrow();
         
-        var vehicle = await _context.Vehicles
+        var vehicle = await context.Vehicles
             .FirstOrDefaultAsync(v => v.Id == request.Id && v.UserId == userId, cancellationToken);
         
         if (vehicle == null) throw new NotFoundException("Avtomobil",  request.Id);
@@ -28,7 +25,7 @@ public class UpdateVehicleCommandHandler(IApplicationDbContext context, ICurrent
         vehicle.ContactNumber = request.ContactNumber;
         vehicle.UpdatedAt = DateTime.UtcNow;
         
-        await _context.SaveChangesAsync(cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
         
         return Unit.Value;
     }

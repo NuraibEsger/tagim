@@ -8,12 +8,9 @@ namespace Tagim.Application.Features.Profile.Commands.AddSocialLink;
 public class AddSocialLinkCommandHandler(IApplicationDbContext context, ICurrentUserService currentUserService)
     : IRequestHandler<AddSocialLinkCommand, int>
 {
-    private readonly IApplicationDbContext _context = context;
-    private readonly ICurrentUserService _currentUserService = currentUserService;
-
     public async Task<int> Handle(AddSocialLinkCommand request, CancellationToken cancellationToken)
     {
-        var userId = _currentUserService.GetUserIdOrThrow();
+        var userId = currentUserService.GetUserIdOrThrow();
 
         var link = new SocialMediaLink
         {
@@ -23,8 +20,8 @@ public class AddSocialLinkCommandHandler(IApplicationDbContext context, ICurrent
             IsVisible = true
         };
         
-        _context.SocialMediaLinks.Add(link);
-        await _context.SaveChangesAsync(cancellationToken);
+        context.SocialMediaLinks.Add(link);
+        await context.SaveChangesAsync(cancellationToken);
         
         return link.Id;
     }

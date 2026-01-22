@@ -8,19 +8,16 @@ namespace Tagim.Application.Features.Vehicles.Commands.DeleteVehicle;
 public class DeleteVehicleCommandHandler(IApplicationDbContext context, ICurrentUserService currentUserService)
     : IRequestHandler<DeleteVehicleCommand, bool>
 {
-    private readonly IApplicationDbContext _context = context;
-    private readonly ICurrentUserService _currentUserService = currentUserService;
-
     public async Task<bool> Handle(DeleteVehicleCommand request, CancellationToken cancellationToken)
     {
-        var userId = _currentUserService.UserId;
+        var userId = currentUserService.UserId;
 
-        var vehicle = await _context.Vehicles
+        var vehicle = await context.Vehicles
             .FirstOrDefaultAsync(v => v.PublicId == request.PublicId && v.UserId == userId, cancellationToken);
 
         if (vehicle == null) throw new NotFoundException("Maşın tapılmadı.");
 
-        var associatedTag = await _context.Tags
+        var associatedTag = await context.Tags
             .FirstOrDefaultAsync(t => t.VehicleId == vehicle.Id, cancellationToken);
 
         if (associatedTag != null)
@@ -29,9 +26,9 @@ public class DeleteVehicleCommandHandler(IApplicationDbContext context, ICurrent
             associatedTag.IsActive = false; 
         }
 
-        _context.Vehicles.Remove(vehicle);
+        context.Vehicles.Remove(vehicle);
 
-        await _context.SaveChangesAsync(cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
 
         return true;
     }

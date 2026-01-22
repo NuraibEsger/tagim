@@ -6,11 +6,9 @@ namespace Tagim.Application.Features.Auth.Commands.ResetPassword;
 
 public class ResetPasswordCommandHandler(IApplicationDbContext context) : IRequestHandler<ResetPasswordCommand, string>
 {
-    private readonly IApplicationDbContext _context = context;
-
     public async Task<string> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
     {
-        var user = await _context.Users
+        var user = await context.Users
             .FirstOrDefaultAsync(x => x.Email == request.Email, cancellationToken);
 
         if (user == null) 
@@ -27,7 +25,7 @@ public class ResetPasswordCommandHandler(IApplicationDbContext context) : IReque
         user.PasswordResetToken = null;
         user.PasswordResetTokenExpires = null;
         
-        await _context.SaveChangesAsync(cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
         
         return "Şifrəniz uğurla yeniləndi! İndi giriş edə bilərsiniz.";
     }

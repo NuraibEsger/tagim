@@ -11,26 +11,24 @@ namespace Tagim.Api.Controllers
     [ApiController]
     public class ProfileController(IMediator mediator) : ControllerBase
     {
-        private readonly IMediator _mediator = mediator;
-
         [HttpPost("social-links")]
         public async Task<IActionResult> AddSocialLink([FromBody] AddSocialLinkCommand command)
         {
-            var id = await _mediator.Send(command);
+            var id = await mediator.Send(command);
             return Ok(new { Id = id, Message = "Sosial media linki əlavə edildi." });
         }
 
         [HttpPut]
         public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileCommand command)
         {
-            await _mediator.Send(command);
+            await mediator.Send(command);
             return Ok(new { Message = "Profil məlumatları uğurla yeniləndi!" });
         }
 
         [HttpPost("upload-image")]
         public async Task<IActionResult> UploadImage([FromForm] UploadProfileImageCommand command)
         {
-            var path = await _mediator.Send(command);
+            var path = await mediator.Send(command);
             return Ok(new { ImageUrl = path });
         }
     }

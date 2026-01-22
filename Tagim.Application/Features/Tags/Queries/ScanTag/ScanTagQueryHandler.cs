@@ -7,11 +7,9 @@ namespace Tagim.Application.Features.Tags.Queries.ScanTag;
 
 public class ScanTagQueryHandler(IApplicationDbContext context) : IRequestHandler<ScanTagQuery, ScanTagResponseDto>
 {
-    private readonly IApplicationDbContext _context = context;
-
     public async Task<ScanTagResponseDto> Handle(ScanTagQuery request, CancellationToken cancellationToken)
     {
-        var tag = await _context.Tags
+        var tag = await context.Tags
             .AsNoTracking()
             .Include(t => t.Vehicle)
             .ThenInclude(v => v!.User)

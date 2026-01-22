@@ -7,11 +7,9 @@ namespace Tagim.Api.Middleware;
 
 public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IExceptionHandler
 {
-    private readonly ILogger<GlobalExceptionHandler> _logger = logger;
-
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
-        _logger.LogError(exception, "Xəta baş verdi: {Message}", exception.Message);
+        logger.LogError(exception, "Xəta baş verdi: {Message}", exception.Message);
 
         var problemDetails = new ProblemDetails
         {

@@ -8,11 +8,9 @@ namespace Tagim.Application.Features.Tags.Queries.GetTagByCode;
 
 public class GetTagByCodeQueryHandler(IApplicationDbContext context) : IRequestHandler<GetTagByCodeQuery, ScanResultDto>
 {
-    private readonly IApplicationDbContext _context = context;
-
     public async Task<ScanResultDto> Handle(GetTagByCodeQuery request, CancellationToken cancellationToken)
     {
-        var tag = await _context.Tags
+        var tag = await context.Tags
             .AsNoTracking()
             .Include(t => t.Vehicle)
             .ThenInclude(v => v!.User)

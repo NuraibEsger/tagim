@@ -7,10 +7,9 @@ namespace Tagim.Application.Features.Auth.Commands.Register;
 
 public class RegisterUserCommandHandler(IApplicationDbContext context) : IRequestHandler<RegisterUserCommand, int>
 {
-    private readonly IApplicationDbContext _context = context;
     public async Task<int> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-        var exists = await _context.Users.AnyAsync(u => 
+        var exists = await context.Users.AnyAsync(u => 
             u.Email == request.Email || u.PhoneNumber == request.PhoneNumber, cancellationToken);
         
         if (exists)
@@ -26,8 +25,8 @@ public class RegisterUserCommandHandler(IApplicationDbContext context) : IReques
             PasswordHash = passwordHash,
         };
         
-        _context.Users.Add(user);
-        await _context.SaveChangesAsync(cancellationToken);
+        context.Users.Add(user);
+        await context.SaveChangesAsync(cancellationToken);
         
         return user.Id;
     }
