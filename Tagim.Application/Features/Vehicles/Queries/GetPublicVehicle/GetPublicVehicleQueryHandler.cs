@@ -13,9 +13,8 @@ public class GetPublicVehicleQueryHandler(IApplicationDbContext context)
     {
         var vehicle = await context.Vehicles
             .AsNoTracking()
-            .Include(v => v.User)  
+            .Include(v => v.User)
             .ThenInclude(v => v.SocialMediaLinks)
-            .AsNoTracking()
             .FirstOrDefaultAsync(v => v.PublicId == request.PublicId, cancellationToken);
         
         if (vehicle == null) throw new NotFoundException("Avtomobil tapılmadı.");
