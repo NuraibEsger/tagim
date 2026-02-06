@@ -13,7 +13,9 @@ public class VehicleProfile : Profile
         CreateMap<Vehicle, VehicleDto>()
             .ForMember(dest => dest.SocialMedia, 
                 opt => opt.MapFrom(src => src.User.SocialMediaLinks!.Where(x => x.IsVisible)));
-        CreateMap<Vehicle, PublicVehicleDto>();
+        CreateMap<Vehicle, PublicVehicleDto>()
+            .ForMember(dest => dest.SocialMediaLinks, 
+                opt => opt.MapFrom(src => src.User.SocialMediaLinks!.Where(x => x.IsVisible)));
         CreateMap<CreateVehicleCommand, Vehicle>()
             .ForMember(v => v.LicensePlate,
                 opt => opt.MapFrom(v => v.LicensePlate.ToUpper()));
