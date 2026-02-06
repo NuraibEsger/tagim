@@ -1,3 +1,5 @@
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Tagim.Application.DTOs;
@@ -7,7 +9,7 @@ using Tagim.Application.Interfaces;
 
 namespace Tagim.Application.Features.Vehicles.Queries.GetPublicVehicle;
 
-public class GetPublicVehicleQueryHandler(IApplicationDbContext context)
+public class GetPublicVehicleQueryHandler(IApplicationDbContext context, IMapper mapper)
     : IRequestHandler<GetPublicVehicleQuery, PublicVehicleDto>
 {
     public async Task<PublicVehicleDto> Handle(GetPublicVehicleQuery request, CancellationToken cancellationToken)
@@ -16,24 +18,11 @@ public class GetPublicVehicleQueryHandler(IApplicationDbContext context)
             .AsNoTracking()
             .Include(v => v.User)
             .ThenInclude(v => v.SocialMediaLinks)
+            .ProjectTo<PublicVehicleDto>(mapper.ConfigurationProvider)
             .FirstOrDefaultAsync(v => v.PublicId == request.PublicId, cancellationToken);
         
         if (vehicle == null) throw new NotFoundException("Avtomobil tapılmadı.");
         
-        var socialMediaLinks = vehicle.User.SocialMediaLinks?
-            .Where(s => s.IsVisible)
-            .Select(s => new SocialMediaDto(s.PlatformName, s.Url, true)).ToList() ?? new List<SocialMediaDto>();
-        
-        return new PublicVehicleDto(
-            vehicle.Make,
-            vehicle.Model,
-            vehicle.LicensePlate,
-            vehicle.Color,
-            vehicle.ContactNumber,
-            vehicle.VehicleImageUrl,
-            vehicle.User.FullName,
-            vehicle.User.ProfileImageUrl,
-            socialMediaLinks
-        );
+        return vehicle;
     }
 }

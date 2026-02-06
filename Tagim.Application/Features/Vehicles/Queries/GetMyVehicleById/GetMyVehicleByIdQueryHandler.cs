@@ -1,4 +1,5 @@
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Tagim.Application.DTOs;
@@ -20,13 +21,12 @@ public class GetMyVehicleByIdQueryHandler(IApplicationDbContext context, ICurren
             .AsNoTracking()
             .Include(v => v.User)
             .ThenInclude(u => u.SocialMediaLinks)
+            .ProjectTo<VehicleDto>(mapper.ConfigurationProvider)
             .FirstOrDefaultAsync(v => v.Id == request.Id && v.UserId == userId,  cancellationToken);
         
         if (vehicle == null)
             throw new NotFoundException("Avtomobil tapılmadı.");
         
-        var response = mapper.Map<VehicleDto>(vehicle);
-        
-        return  response;
+        return  vehicle;
     }
 }
