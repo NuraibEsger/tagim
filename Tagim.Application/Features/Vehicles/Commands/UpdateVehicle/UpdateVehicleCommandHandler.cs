@@ -1,3 +1,4 @@
+using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Tagim.Application.Exceptions;
@@ -6,7 +7,7 @@ using Tagim.Application.Interfaces;
 
 namespace Tagim.Application.Features.Vehicles.Commands.UpdateVehicle;
 
-public class UpdateVehicleCommandHandler(IApplicationDbContext context, ICurrentUserService currentUserService)
+public class UpdateVehicleCommandHandler(IApplicationDbContext context, ICurrentUserService currentUserService, IMapper mapper)
     : IRequestHandler<UpdateVehicleCommand, Unit>
 {
     public async Task<Unit> Handle(UpdateVehicleCommand request, CancellationToken cancellationToken)
@@ -18,11 +19,8 @@ public class UpdateVehicleCommandHandler(IApplicationDbContext context, ICurrent
         
         if (vehicle == null) throw new NotFoundException("Avtomobil",  request.Id);
         
-        vehicle.LicensePlate = request.LicensePlate.ToUpper();
-        vehicle.Make = request.Make;
-        vehicle.Model = request.Model;
-        vehicle.Color = request.Color;
-        vehicle.ContactNumber = request.ContactNumber;
+        mapper.Map(request, vehicle);
+        
         vehicle.UpdatedAt = DateTime.UtcNow;
         
         await context.SaveChangesAsync(cancellationToken);

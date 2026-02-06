@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Tagim.Application.DTOs;
+using Tagim.Application.DTOs.Vehicle;
 using Tagim.Application.Exceptions;
 using Tagim.Application.Interfaces;
 

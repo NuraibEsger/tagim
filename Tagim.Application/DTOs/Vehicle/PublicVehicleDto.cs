@@ -1,6 +1,6 @@
 using Tagim.Domain.Common;
 
-namespace Tagim.Application.DTOs;
+namespace Tagim.Application.DTOs.Vehicle;
 
 public record PublicVehicleDto(
     string Make,

@@ -1,5 +1,8 @@
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Tagim.Application.DTOs.Vehicle;
 using Tagim.Application.DTOs;
 using Tagim.Application.Extensions;
 using Tagim.Application.Interfaces;
@@ -7,7 +10,7 @@ using Tagim.Domain.Common;
 
 namespace Tagim.Application.Features.Vehicles.Queries.GetMyVehicles;
 
-public class GetMyVehiclesQueryHandler(IApplicationDbContext context, ICurrentUserService currentUserService)
+public class GetMyVehiclesQueryHandler(IApplicationDbContext context, ICurrentUserService currentUserService, IMapper mapper)
     : IRequestHandler<GetMyVehiclesQuery, List<VehicleDto>>
 {
     public async Task<List<VehicleDto>> Handle(GetMyVehiclesQuery request, CancellationToken cancellationToken)
@@ -18,24 +21,8 @@ public class GetMyVehiclesQueryHandler(IApplicationDbContext context, ICurrentUs
             .AsNoTracking()
             .Where(v => v.UserId == userId)
             .OrderByDescending(v => v.CreatedAt)
-            .Select(v => new VehicleDto(
-                v.Id,
-                v.PublicId,
-                v.LicensePlate,
-                v.Make,
-                v.Model,
-                v.Color,
-                v.ContactNumber,
-                v.VehicleImageUrl,
-                v.UserId,
-                (v.User.SocialMediaLinks ?? Enumerable.Empty<SocialMediaLink>())
-                    .Where(sm => sm.IsVisible)
-                    .Select(sm => new SocialMediaDto(
-                        sm.PlatformName, 
-                        sm.Url, 
-                        sm.IsVisible
-                    )).ToList()
-            )).ToListAsync(cancellationToken);
+            .ProjectTo<VehicleDto>(mapper.ConfigurationProvider)
+            .ToListAsync(cancellationToken);
         
         return vehicles;
     }

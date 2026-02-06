@@ -1,3 +1,4 @@
+using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Tagim.Application.Extensions;
@@ -7,6 +8,7 @@ using Tagim.Domain.Common;
 namespace Tagim.Application.Features.Vehicles.Commands.CreateVehicle;
 
 public class CreateVehicleCommandHandler(
+    IMapper mapper,
     IApplicationDbContext context, 
     ICurrentUserService currentUserService) : IRequestHandler<CreateVehicleCommand, int>
 {
@@ -22,15 +24,7 @@ public class CreateVehicleCommandHandler(
             throw new Exception($"'{request.LicensePlate}' nömrəli avtomobil artıq sistemdə mövcuddur.");
         }
         
-        var vehicle = new Vehicle
-        {
-            UserId = userId,
-            LicensePlate = request.LicensePlate.ToUpper(),
-            Make = request.Make,
-            Model = request.Model,
-            Color = request.Color,
-            ContactNumber = request.ContactNumber
-        };
+        var vehicle = mapper.Map<Vehicle>(request);
         
         context.Vehicles.Add(vehicle);
         await context.SaveChangesAsync(cancellationToken);

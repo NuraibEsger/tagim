@@ -21,6 +21,11 @@ public class UploadVehicleImageCommandHandler(IApplicationDbContext context, ICu
         {
             fileStorageService.DeleteFile(vehicle.VehicleImageUrl);
         }
+
+        if (request.File is null)
+        {
+            return "File boşdur";
+        }
         
         var imageUrl = await fileStorageService.SaveFileAsync(request.File, "vehicles");
         
