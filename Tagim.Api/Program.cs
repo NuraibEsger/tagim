@@ -1,8 +1,8 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi;
 using Tagim.Api.Middleware;
+using Tagim.Api.Profiles;
 using Tagim.Api.Services;
 using Tagim.Application;
 using Tagim.Application.Interfaces;
@@ -26,6 +26,9 @@ public abstract class Program
         
         builder.Services.AddProblemDetails();
         builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+        
+        // AutoMapper
+        builder.Services.AddAutoMapper(typeof(VehicleProfile));
         
         builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
         builder.Services.AddInfrastructureServices(builder.Configuration);

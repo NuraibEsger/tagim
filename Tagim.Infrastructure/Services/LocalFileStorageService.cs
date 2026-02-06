@@ -6,11 +6,9 @@ namespace Tagim.Infrastructure.Services;
 
 public class LocalFileStorageService(IWebHostEnvironment env) : IFileStorageService
 {
-    private readonly IWebHostEnvironment  _env = env;
-
     public async Task<string> SaveFileAsync(IFormFile file, string folderName)
     {
-        var uploadPath = Path.Combine(_env.WebRootPath, "uploads", folderName);
+        var uploadPath = Path.Combine(env.WebRootPath, "uploads", folderName);
         
         if (!Directory.Exists(uploadPath))
             Directory.CreateDirectory(uploadPath);
@@ -30,7 +28,7 @@ public class LocalFileStorageService(IWebHostEnvironment env) : IFileStorageServ
     {
         if (string.IsNullOrEmpty(filePath)) return;
 
-        var fullPath = Path.Combine(_env.WebRootPath, filePath.TrimStart('/'));
+        var fullPath = Path.Combine(env.WebRootPath, filePath.TrimStart('/'));
         if (File.Exists(fullPath))
         {
             File.Delete(fullPath);

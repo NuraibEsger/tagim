@@ -9,14 +9,11 @@ namespace Tagim.Application.Features.Profile.Commands.UpdateProfile;
 public class UpdateProfileCommandHandler(IApplicationDbContext context, ICurrentUserService currentUserService)
     : IRequestHandler<UpdateProfileCommand, bool>
 {
-    private readonly IApplicationDbContext _context = context;
-    private readonly ICurrentUserService _currentUserService = currentUserService;
-
     public async Task<bool> Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
     {
-        var userId = _currentUserService.GetUserIdOrThrow();
+        var userId = currentUserService.GetUserIdOrThrow();
 
-        var user = await _context.Users
+        var user = await context.Users
             .FindAsync([userId], cancellationToken);
 
         if (user == null)
@@ -35,7 +32,7 @@ public class UpdateProfileCommandHandler(IApplicationDbContext context, ICurrent
                 IsVisible = dto.IsVisible
             }).ToList();
 
-        await _context.SaveChangesAsync(cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
 
         return true;
     }

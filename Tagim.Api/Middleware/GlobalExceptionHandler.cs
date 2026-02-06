@@ -7,15 +7,13 @@ namespace Tagim.Api.Middleware;
 
 public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IExceptionHandler
 {
-    private readonly ILogger<GlobalExceptionHandler> _logger = logger;
-
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
-        _logger.LogError(exception, "Xəta baş verdi: {Message}", exception.Message);
+        logger.LogError(exception, "Xəta baş verdi: {Message}", exception.Message);
 
         var problemDetails = new ProblemDetails
         {
-            Instance = httpContext.Request.Path
+            Instance = httpContext.Request.Path,
         };
         
         // 1. FluentValidation
@@ -50,7 +48,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
             httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
             problemDetails.Title = "Server Xətası";
             problemDetails.Status = StatusCodes.Status500InternalServerError;
-            problemDetails.Detail = "Daxili xəta baş verdi. Zəhmət olmasa adminlə əlaqə saxlayın.";
+            problemDetails.Detail = exception.Message;
         }
         
         await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);

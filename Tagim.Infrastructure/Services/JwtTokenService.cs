@@ -10,11 +10,9 @@ namespace Tagim.Infrastructure.Services;
 
 public class JwtTokenService(IConfiguration configuration) : ITokenService
 {
-    private readonly IConfiguration _configuration = configuration;
-
     public string GenerateToken(User user)
     {
-        var jwtSettings = _configuration.GetSection("JwtSettings");
+        var jwtSettings = configuration.GetSection("JwtSettings");
         var secretKey = Encoding.UTF8.GetBytes(jwtSettings["Secret"]!);
 
         var claims = new List<Claim>

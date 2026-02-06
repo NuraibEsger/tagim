@@ -8,6 +8,6 @@ public class UploadVehicleImageCommandValidator : AbstractValidator<UploadVehicl
     public UploadVehicleImageCommandValidator()
     {
         RuleFor(x => x.VehicleId).GreaterThan(0).WithMessage("Yanlış maşın ID-si.");
-        RuleFor(x => x.File).IsValidImage();
+        RuleFor(x => x.File)!.IsValidImage();
     }
 }

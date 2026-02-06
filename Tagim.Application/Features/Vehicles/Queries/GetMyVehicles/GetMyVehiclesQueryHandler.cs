@@ -1,34 +1,28 @@
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Tagim.Application.DTOs.Vehicle;
 using Tagim.Application.DTOs;
 using Tagim.Application.Extensions;
 using Tagim.Application.Interfaces;
+using Tagim.Domain.Common;
 
 namespace Tagim.Application.Features.Vehicles.Queries.GetMyVehicles;
 
-public class GetMyVehiclesQueryHandler(IApplicationDbContext context, ICurrentUserService currentUserService)
+public class GetMyVehiclesQueryHandler(IApplicationDbContext context, ICurrentUserService currentUserService, IMapper mapper)
     : IRequestHandler<GetMyVehiclesQuery, List<VehicleDto>>
 {
-    private readonly IApplicationDbContext _context = context;
-    private readonly ICurrentUserService _currentUserService = currentUserService;
-
     public async Task<List<VehicleDto>> Handle(GetMyVehiclesQuery request, CancellationToken cancellationToken)
     {
-        var userId = _currentUserService.GetUserIdOrThrow();
+        var userId = currentUserService.GetUserIdOrThrow();
 
-        var vehicles = await _context.Vehicles
+        var vehicles = await context.Vehicles
+            .AsNoTracking()
             .Where(v => v.UserId == userId)
             .OrderByDescending(v => v.CreatedAt)
-            .Select(v => new VehicleDto(
-                v.Id,
-                v.PublicId,
-                v.LicensePlate,
-                v.Make,
-                v.Model,
-                v.Color,
-                v.ContactNumber,
-                v.VehicleImageUrl
-            )).ToListAsync(cancellationToken);
+            .ProjectTo<VehicleDto>(mapper.ConfigurationProvider)
+            .ToListAsync(cancellationToken);
         
         return vehicles;
     }

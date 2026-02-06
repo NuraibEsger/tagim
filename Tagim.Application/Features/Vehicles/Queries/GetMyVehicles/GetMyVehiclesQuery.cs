@@ -1,9 +1,6 @@
 using MediatR;
-using Tagim.Application.DTOs;
+using Tagim.Application.DTOs.Vehicle;
 
 namespace Tagim.Application.Features.Vehicles.Queries.GetMyVehicles;
 
-public class GetMyVehiclesQuery : IRequest<List<VehicleDto>>
-{
-    
-}
+public record GetMyVehiclesQuery : IRequest<List<VehicleDto>>;

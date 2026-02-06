@@ -9,14 +9,11 @@ namespace Tagim.Application.Features.Tags.Commands.ActivateTag;
 public class ActivateTagCommandHandler(IApplicationDbContext context, ICurrentUserService currentUserService)
     : IRequestHandler<ActivateTagCommand, bool>
 {
-    private readonly IApplicationDbContext _context = context;
-    private readonly ICurrentUserService _currentUserService = currentUserService;
-
     public async Task<bool> Handle(ActivateTagCommand request, CancellationToken cancellationToken)
     {
-        var userId = _currentUserService.GetUserIdOrThrow();
+        var userId = currentUserService.GetUserIdOrThrow();
         
-        var tag = await _context.Tags
+        var tag = await context.Tags
             .FirstOrDefaultAsync(t => t.UniqueCode == request.UniqueCode, cancellationToken);
  
         if (tag == null)
@@ -29,7 +26,7 @@ public class ActivateTagCommandHandler(IApplicationDbContext context, ICurrentUs
             throw new Exception("Bu stiker artıq istifadə olunub!");
         }
         
-        var vehicle = await _context.Vehicles
+        var vehicle = await context.Vehicles
             .FirstOrDefaultAsync(v => v.PublicId == request.VehiclePublicId && v.UserId == userId, cancellationToken);
         
         if (vehicle == null)
@@ -41,7 +38,7 @@ public class ActivateTagCommandHandler(IApplicationDbContext context, ICurrentUs
         tag.IsActive = true;
         tag.UpdatedAt = DateTime.UtcNow;
         
-        await _context.SaveChangesAsync(cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
         return true;
     }
 }

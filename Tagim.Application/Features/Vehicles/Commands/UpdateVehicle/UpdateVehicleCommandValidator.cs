@@ -15,7 +15,9 @@ public class UpdateVehicleCommandValidator : AbstractValidator<UpdateVehicleComm
 
         RuleFor(x => x.Make).NotEmpty().WithMessage("Marka qeyd olunmalıdır.");
         RuleFor(x => x.Model).NotEmpty().WithMessage("Model qeyd olunmalıdır.");
-            
+
+        RuleFor(x => x.Color).NotEmpty().WithMessage("Rəng qeyd olunmayib");
+        
         RuleFor(x => x.ContactNumber)
             .NotEmpty()
             .Matches(@"^(\+994|994|0)(50|51|55|60|70|77|99)[0-9]{7}$")

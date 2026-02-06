@@ -7,12 +7,9 @@ namespace Tagim.Application.Features.Auth.Commands.ForgotPassword;
 public class ForgotPasswordCommandHandler(IApplicationDbContext context, IEmailService emailService)
     : IRequestHandler<ForgotPasswordCommand, string>
 {
-    private readonly IApplicationDbContext _context = context;
-    private readonly IEmailService _emailService = emailService;
-
     public async Task<string> Handle(ForgotPasswordCommand request, CancellationToken cancellationToken)
     {
-        var user = await _context.Users
+        var user = await context.Users
             .FirstOrDefaultAsync(u => u.Email == request.Email, cancellationToken: cancellationToken);
 
         if (user == null)
@@ -24,7 +21,7 @@ public class ForgotPasswordCommandHandler(IApplicationDbContext context, IEmailS
 
         user.PasswordResetToken = user.PasswordHash + token;
         user.PasswordResetTokenExpires = DateTime.UtcNow.AddMinutes(15);
-        await _context.SaveChangesAsync(cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
 
         string emailBody = $@"
                 <h3>Salam, {user.FullName}!</h3>
@@ -35,7 +32,7 @@ public class ForgotPasswordCommandHandler(IApplicationDbContext context, IEmailS
                 <p>Hörmətlə, <b>Tagim Komandası</b></p>
         ";
         
-        await _emailService.SendEmailAsync(user.Email, "Şifrənin Bərpası", emailBody);
+        await emailService.SendEmailAsync(user.Email, "Şifrənin Bərpası", emailBody);
         
         return "Əgər bu email sistemdə varsa, bərpa kodu göndərildi.";
     }
