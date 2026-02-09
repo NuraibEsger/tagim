@@ -29,7 +29,7 @@ public class GetTagByCodeQueryHandler(IApplicationDbContext context) : IRequestH
         
         var socialLinks = tag.Vehicle.User.SocialMediaLinks?
             .Where(s => s.IsVisible) 
-            .Select(s => new SocialMediaDto(s.PlatformName, s.Url, true))
+            .Select(s => new SocialMediaDto(s.Id, s.PlatformName, s.Url, true))
             .ToList();
 
         return new ScanResultDto(

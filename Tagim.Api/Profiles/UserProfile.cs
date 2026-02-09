@@ -9,6 +9,6 @@ public class UserProfile : Profile
     public UserProfile()
     {
         CreateMap<User, UserProfileDto>().ForMember(dest => dest.SocialLinks,
-            opt => opt.MapFrom(x => x.SocialMediaLinks!.Where(y => y.IsVisible)));
+            opt => opt.MapFrom(x => x.SocialMediaLinks));
     }
 }

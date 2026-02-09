@@ -37,7 +37,7 @@ public class ScanTagQueryHandler(IApplicationDbContext context) : IRequestHandle
         
         var socialLinks = tag.Vehicle.User.SocialMediaLinks?
             .Where(s => s.IsVisible)
-            .Select(s => new SocialMediaDto(s.PlatformName, s.Url, true))
+            .Select(s => new SocialMediaDto(s.Id, s.PlatformName, s.Url, true))
             .ToList();
 
         var vehicleData = new ScanResultDto(
