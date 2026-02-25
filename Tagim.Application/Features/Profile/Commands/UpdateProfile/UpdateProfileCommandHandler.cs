@@ -48,7 +48,7 @@ public class UpdateProfileCommandHandler(IApplicationDbContext context, ICurrent
 
             foreach (var linkDto in request.SocialMedia)
             {
-                if (linkDto.Id.HasValue && linkDto.Id > 0)
+                if (linkDto.Id is > 0)
                 {
                     var existingLink = existingLinks.FirstOrDefault(x => x.Id == linkDto.Id);
 

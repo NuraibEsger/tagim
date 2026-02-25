@@ -13,7 +13,7 @@ public class DeleteVehicleCommandHandler(IApplicationDbContext context, ICurrent
         var userId = currentUserService.UserId;
 
         var vehicle = await context.Vehicles
-            .FirstOrDefaultAsync(v => v.PublicId == request.PublicId && v.UserId == userId, cancellationToken);
+            .FirstOrDefaultAsync(v => v.Id == request.Id && v.UserId == userId, cancellationToken);
 
         if (vehicle == null) throw new NotFoundException("Maşın tapılmadı.");
 
