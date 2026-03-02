@@ -17,7 +17,7 @@ public class CreateVehicleCommandHandler(
         var userId = currentUserService.GetUserIdOrThrow();
         
         var exists = await context.Vehicles
-            .AnyAsync(v => v.LicensePlate == request.LicensePlate, cancellationToken);
+            .AnyAsync(v => v.LicensePlate.ToLower() == request.LicensePlate.ToLower(), cancellationToken);
 
         if (exists)
         {
@@ -25,6 +25,7 @@ public class CreateVehicleCommandHandler(
         }
         
         var vehicle = mapper.Map<Vehicle>(request);
+        vehicle.UserId = userId;
         
         context.Vehicles.Add(vehicle);
         await context.SaveChangesAsync(cancellationToken);
