@@ -35,12 +35,12 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
             problemDetails.Status = StatusCodes.Status404NotFound;
             problemDetails.Detail = notFoundException.Message;
         }
-        else if (exception is UnauthorizedAccessException)
+        else if (exception is UnauthorizedAccessException  unauthorizedAccessException)
         {
             httpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
             problemDetails.Title = "Giriş Qadağandır";
             problemDetails.Status = StatusCodes.Status401Unauthorized;
-            problemDetails.Detail = "Bu əməliyyatı yerinə yetirmək üçün sistemə daxil olmalısınız.";
+            problemDetails.Detail = unauthorizedAccessException.Message;
         }
         // Other exceptions
         else

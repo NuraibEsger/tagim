@@ -6,7 +6,7 @@ using Tagim.Application.Interfaces;
 
 namespace Tagim.Application.Features.Profile.Commands.UploadSocialLink;
 
-public class UploadSocialLinkCommandHandler(IApplicationDbContext context, ICurrentUserService currentUserService) 
+public class UpdateSocialLinkCommandHandler(IApplicationDbContext context, ICurrentUserService currentUserService) 
     : IRequestHandler<UpdateSocialLinkCommand, int>
 {
     public async Task<int> Handle(UpdateSocialLinkCommand request, CancellationToken cancellationToken)
@@ -14,11 +14,11 @@ public class UploadSocialLinkCommandHandler(IApplicationDbContext context, ICurr
         var userId = currentUserService.GetUserIdOrThrow();
         
         var exists = await context.SocialMediaLinks
-            .FirstOrDefaultAsync(s => s.Id == request.SocialLinkId, cancellationToken);
+            .FirstOrDefaultAsync(s => s.Id == request.SocialLinkId && s.UserId == userId, cancellationToken);
 
         if (exists is null)
         {
-            throw new NotFoundException("Sosial link tapılmadı.");
+            throw new NotFoundException("Sosial link tapılmadı və ya bu linki dəyişməyə icazəniz yoxdur.");
         }
         
         exists.PlatformName = request.PlatformName;

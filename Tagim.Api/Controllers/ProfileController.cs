@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Tagim.Application.Features.Profile.Commands.AddSocialLink;
 using Tagim.Application.Features.Profile.Commands.UpdateProfile;
 using Tagim.Application.Features.Profile.Commands.UploadProfileImage;
+using Tagim.Application.Features.Profile.Commands.UploadSocialLink;
 using Tagim.Application.Features.Profile.Queries.GetProfile;
 
 namespace Tagim.Api.Controllers
@@ -27,8 +28,14 @@ namespace Tagim.Api.Controllers
         {
             var id = await mediator.Send(command);
             return Ok(new { Id = id, Message = "Sosial media linki əlavə edildi." });
-            
-            
+        }
+
+        [HttpPut("social-links/{id}")]
+        public async Task<IActionResult> UpdateSocailLink(int id, [FromBody] UpdateSocialLinkCommand command)
+        {
+            command.SocialLinkId = id;
+            await mediator.Send(command);
+            return Ok(new { Message = "Sosial media linki yeniləndi", Id = id });
         }
 
         [HttpPut]

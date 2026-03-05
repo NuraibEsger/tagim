@@ -11,11 +11,11 @@ public class LoginUserCommandHandler(IApplicationDbContext context, ITokenServic
         var user = await context.Users
             .FirstOrDefaultAsync(u => u.Email == request.Email, cancellationToken);
         
-        if (user == null) throw new UnauthorizedAccessException("Email or password is incorrect");
+        if (user == null) throw new UnauthorizedAccessException("İstifadəçi adı və ya parol səhvdir.");
         
         bool isPasswordValid = BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash);
         
-        if (!isPasswordValid) throw new UnauthorizedAccessException("Password is incorrect");
+        if (!isPasswordValid) throw new UnauthorizedAccessException("İstifadəçi adı və ya parol səhvdir.");
         
         return token.GenerateToken(user);
     }
