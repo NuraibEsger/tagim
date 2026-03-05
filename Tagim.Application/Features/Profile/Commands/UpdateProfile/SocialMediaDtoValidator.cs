@@ -3,9 +3,9 @@ using Tagim.Application.DTOs;
 
 namespace Tagim.Application.Features.Profile.Commands.UploadSocialLink;
 
-public class UpdateSocialLinkCommandValidator  : AbstractValidator<SocialMediaDto>
+public class SocialMediaDtoValidator  : AbstractValidator<SocialMediaDto>
 {
-    public UpdateSocialLinkCommandValidator()
+    public SocialMediaDtoValidator()
     {
         // 2. Platforma adı yoxlanışı
         RuleFor(x => x.PlatformName)

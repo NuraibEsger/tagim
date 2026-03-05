@@ -30,14 +30,6 @@ namespace Tagim.Api.Controllers
             return Ok(new { Id = id, Message = "Sosial media linki əlavə edildi." });
         }
 
-        [HttpPut("social-links/{id}")]
-        public async Task<IActionResult> UpdateSocailLink(int id, [FromBody] UpdateSocialLinkCommand command)
-        {
-            command.SocialLinkId = id;
-            await mediator.Send(command);
-            return Ok(new { Message = "Sosial media linki yeniləndi", Id = id });
-        }
-
         [HttpPut]
         public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileCommand command)
         {
