@@ -1,16 +1,12 @@
 using FluentValidation;
+using Tagim.Application.DTOs;
 
 namespace Tagim.Application.Features.Profile.Commands.UploadSocialLink;
 
-public class UpdateSocialLinkCommandValidator  : AbstractValidator<UpdateSocialLinkCommand>
+public class UpdateSocialLinkCommandValidator  : AbstractValidator<SocialMediaDto>
 {
     public UpdateSocialLinkCommandValidator()
     {
-        // 1. ID yoxlanışı
-        RuleFor(x => x.SocialLinkId)
-            .GreaterThan(0)
-            .WithMessage("Keçərli bir link ID-si göndərilməlidir.");
-
         // 2. Platforma adı yoxlanışı
         RuleFor(x => x.PlatformName)
             .NotEmpty().WithMessage("Platforma adı boş ola bilməz.")
