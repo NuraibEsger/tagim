@@ -7,5 +7,5 @@ public class UpdateProfileCommand : IRequest<bool>
 {
     public string FullName { get; set; } = string.Empty;
     public string PhoneNumber { get; set; } = string.Empty;
-    public List<SocialMediaDto> SocialMedia { get; set; } = [];
+    public List<SocialMediaDto> SocialMedia { get; set; } = new();
 }

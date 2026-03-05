@@ -1,6 +1,8 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
+using Scalar.AspNetCore;
 using Tagim.Api.Middleware;
 using Tagim.Api.Profiles;
 using Tagim.Api.Services;
@@ -59,7 +61,19 @@ public abstract class Program
                 };
             });
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-        builder.Services.AddOpenApi();
+        builder.Services.AddOpenApi(options =>
+        {
+            options.AddDocumentTransformer((document, context, cancellationToken) =>
+            {
+                document.Components ??= new OpenApiComponents();
+                document.Servers = new List<OpenApiServer>
+                {
+                    new OpenApiServer { Url = "http://localhost:8080", Description = "Local Development Server" }
+                };
+                
+                return Task.CompletedTask;
+            });
+        });
         
         builder.Services.AddCors(options =>
         {
@@ -72,11 +86,6 @@ public abstract class Program
         });
 
         builder.Services.AddScoped<ApplicationDbContext>();
-
-        builder.Services.AddSwaggerGen(options =>
-        {
-            options.SwaggerDoc("v1", new() { Title = "Tagim API", Version = "v1" });
-        });
         
         var app = builder.Build();
 
@@ -84,8 +93,11 @@ public abstract class Program
         if (app.Environment.IsDevelopment())
         {
             app.MapOpenApi();
-            app.UseSwagger();
-            app.UseSwaggerUI();
+            app.MapScalarApiReference(options =>
+            {
+                options.WithTitle("Tagim API")
+                    .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
+            });
         }
     
         //app.UseHttpsRedirection();
@@ -98,7 +110,7 @@ public abstract class Program
         
         app.UseCors("AllowAll");
         
-        app.UseAuthorization();
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();

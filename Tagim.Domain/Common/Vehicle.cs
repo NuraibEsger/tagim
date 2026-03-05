@@ -11,6 +11,6 @@ public class Vehicle : BaseEntity
     // This is special number for car
     public string ContactNumber { get; set; } = string.Empty;
     
-    public int UserId { get; init; }
+    public int UserId { get; set; }
     public User User { get; init; } = null!;
 }

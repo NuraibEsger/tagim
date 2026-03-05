@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Tagim.Application.Exceptions;
 using Tagim.Application.Extensions;
 using Tagim.Application.Interfaces;
@@ -14,7 +15,8 @@ public class UpdateProfileCommandHandler(IApplicationDbContext context, ICurrent
         var userId = currentUserService.GetUserIdOrThrow();
 
         var user = await context.Users
-            .FindAsync([userId], cancellationToken);
+            .Include(s => s.SocialMediaLinks)
+            .FirstOrDefaultAsync(user => user.Id == userId, cancellationToken);
 
         if (user == null)
         {
@@ -24,16 +26,53 @@ public class UpdateProfileCommandHandler(IApplicationDbContext context, ICurrent
         user.FullName = request.FullName;
         user.PhoneNumber = request.PhoneNumber.Trim();
         user.UpdatedAt = DateTime.UtcNow;
-        user.SocialMediaLinks = request.SocialMedia
-            .Select(dto => new SocialMediaLink
+
+        if (user.SocialMediaLinks != null)
+        {
+            var existingLinks = user.SocialMediaLinks.ToList();
+
+            var requestLinkIds = request.SocialMedia
+                .Where(x => x.Id.HasValue)
+                .Select(x => x.Id!.Value)
+                .ToList();
+
+            var linksToDelete = existingLinks
+                .Where(dbLink => !requestLinkIds.Contains(dbLink.Id))
+                .ToList();
+
+            foreach (var linkToDelete in linksToDelete)
             {
-                PlatformName = dto.PlatformName,
-                Url = dto.Url,
-                IsVisible = dto.IsVisible
-            }).ToList();
+                user.SocialMediaLinks.Remove(linkToDelete);
+            }
+
+
+            foreach (var linkDto in request.SocialMedia)
+            {
+                if (linkDto.Id is > 0)
+                {
+                    var existingLink = existingLinks.FirstOrDefault(x => x.Id == linkDto.Id);
+
+                    if (existingLink != null)
+                    {
+                        existingLink.PlatformName = linkDto.PlatformName;
+                        existingLink.Url = linkDto.Url;
+                        existingLink.IsVisible = linkDto.IsVisible;
+                    }
+                }
+                else
+                {
+                    user.SocialMediaLinks.Add(new SocialMediaLink
+                    {
+                        PlatformName = linkDto.PlatformName,
+                        Url = linkDto.Url,
+                        IsVisible = linkDto.IsVisible,
+                        UserId = userId
+                    });
+                }
+            }
+        }
 
         await context.SaveChangesAsync(cancellationToken);
-
         return true;
     }
 }
