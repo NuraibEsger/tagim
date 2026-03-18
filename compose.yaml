@@ -14,6 +14,8 @@
       - db
     volumes:
       - ./Tagim.Api/wwwroot/uploads:/app/wwwroot/uploads
+    networks:
+      - tagim-network
 
   db:
     image: postgres:16
@@ -26,7 +28,12 @@
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - tagim-network
 
 
 volumes:
   postgres_data:
+
+networks:
+  tagim-network:
