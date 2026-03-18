@@ -1,3 +1,4 @@
+using Tagim.Application.DTOs.SocialMedias;
 using Tagim.Domain.Common;
 
 namespace Tagim.Application.DTOs.Vehicle;

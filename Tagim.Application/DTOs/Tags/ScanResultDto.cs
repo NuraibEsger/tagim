@@ -1,4 +1,6 @@
-namespace Tagim.Application.DTOs;
+using Tagim.Application.DTOs.SocialMedias;
+
+namespace Tagim.Application.DTOs.Tags;
 
 public record ScanResultDto(
     string LicensePlate,

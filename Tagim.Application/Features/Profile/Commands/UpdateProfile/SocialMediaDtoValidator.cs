@@ -1,5 +1,5 @@
 using FluentValidation;
-using Tagim.Application.DTOs;
+using Tagim.Application.DTOs.SocialMedias;
 
 namespace Tagim.Application.Features.Profile.Commands.UploadSocialLink;
 

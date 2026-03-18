@@ -1,5 +1,5 @@
 using MediatR;
-using Tagim.Application.DTOs;
+using Tagim.Application.DTOs.SocialMedias;
 
 namespace Tagim.Application.Features.Profile.Commands.UpdateProfile;
 

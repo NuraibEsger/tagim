@@ -1,5 +1,5 @@
 using AutoMapper;
-using Tagim.Application.DTOs;
+using Tagim.Application.DTOs.SocialMedias;
 using Tagim.Domain.Common;
 
 namespace Tagim.Api.Profiles;

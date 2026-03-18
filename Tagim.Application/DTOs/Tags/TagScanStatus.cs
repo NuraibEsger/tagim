@@ -1,4 +1,4 @@
-namespace Tagim.Application.DTOs;
+namespace Tagim.Application.DTOs.Tags;
 
 public enum TagScanStatus
 {

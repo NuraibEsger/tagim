@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Tagim.Domain.Common;
 
 public class Tag : BaseEntity

@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Tagim.Application.DTOs;
+using Tagim.Application.DTOs.SocialMedias;
+using Tagim.Application.DTOs.Tags;
 using Tagim.Application.Interfaces;
 
 namespace Tagim.Application.Features.Tags.Queries.ScanTag;

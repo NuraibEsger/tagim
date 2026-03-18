@@ -1,6 +1,5 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Tagim.Application.Features.Tags.Commands.ActivateTag;
 using Tagim.Application.Features.Tags.Commands.CreateBulkTags;

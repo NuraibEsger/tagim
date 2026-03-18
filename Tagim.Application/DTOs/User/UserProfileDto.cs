@@ -1,3 +1,5 @@
+using Tagim.Application.DTOs.SocialMedias;
+
 namespace Tagim.Application.DTOs.User;
 
 public record UserProfileDto
