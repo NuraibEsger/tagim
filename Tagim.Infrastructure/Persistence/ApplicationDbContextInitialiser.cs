@@ -40,7 +40,7 @@ public class ApplicationDbContextInitialiser(
 
     private async Task TrySeedAsync()
     {
-        if (!await context.Users.AnyAsync())
+        if (!await context.Users.AnyAsync(u => u.Role == UserRole.Admin))
         {
             var admin = new User
             {
