@@ -25,7 +25,7 @@ public static class InfrastructureServiceRegistration
         
         services.AddScoped<IFileStorageService, LocalFileStorageService>();
 
-        services.AddScoped<ApplicationDbContextInitialiser>();
+        services.AddScoped<ApplicationDbContextInitializer>();
         
         return services;
     }

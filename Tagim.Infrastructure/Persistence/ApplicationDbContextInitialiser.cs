@@ -5,9 +5,9 @@ using Tagim.Domain.Enums;
 
 namespace Tagim.Infrastructure.Persistence;
 
-public class ApplicationDbContextInitialiser(
+public class ApplicationDbContextInitializer(
     ApplicationDbContext context,
-    ILogger<ApplicationDbContextInitialiser> logger)
+    ILogger<ApplicationDbContextInitializer> logger)
 {
     public async Task InitializeAsync()
     {

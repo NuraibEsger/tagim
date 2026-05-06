@@ -13,7 +13,11 @@ public static class ApplicationServiceRegistration
         var assembly = Assembly.GetExecutingAssembly();
         
         // 1. MediatR
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(assembly!));
+        services.AddMediatR(cfg =>
+        {
+            cfg.RegisterServicesFromAssembly(assembly!);
+            cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+        });
         
         // 2. FluentValidation
         services.AddValidatorsFromAssembly(assembly);

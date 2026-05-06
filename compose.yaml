@@ -14,6 +14,8 @@
       - db
     volumes:
       - ./Tagim.Api/wwwroot/uploads:/app/wwwroot/uploads
+    networks:
+      - elastic
 
   db:
     image: postgres:16
@@ -26,7 +28,37 @@
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
+        
+  elasticsearch:
+    container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.4.0
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false 
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    networks:
+      - elastic
+    
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:9.4.0
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    environment:
+      - ELASTICSEARCH_URL=http://localhost:9200
+    networks:
+      - elastic
+  
+networks:
+  elastic:
+    driver: bridge
 
 volumes:
   postgres_data:
+  elasticsearch-data:
