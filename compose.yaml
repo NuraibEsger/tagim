@@ -8,6 +8,7 @@
     environment:
       - ConnectionStrings__DefaultConnection=Server=db;Port=5432;Database=TagimDb;User Id=postgres;Password=admin;
       - ASPNETCORE_ENVIRONMENT=Development
+      - Elasticsearch__Uri=http://elasticsearch:9200
     ports:
       - "8080:8080"
     depends_on:
@@ -26,6 +27,8 @@
       - POSTGRES_DB=TagimDb
     ports:
       - "5433:5432"
+    networks:
+      - elastic
     volumes:
       - postgres_data:/var/lib/postgresql/data
         

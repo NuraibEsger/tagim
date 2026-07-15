@@ -1,0 +1,68 @@
+/* Əsas fon rəngi */
+body {
+    background-color: #1e1e2e;
+}
+
+.swagger-ui {
+    background-color: #1e1e2e;
+}
+
+/* Üst başlıq (topbar) */
+.swagger-ui .topbar {
+    background-color: #11111b;
+    border-bottom: 2px solid #313244;
+}
+
+/* Başlıq mətni */
+.swagger-ui .info .title {
+    color: #cdd6f4;
+}
+
+.swagger-ui .info {
+    color: #cdd6f4;
+}
+
+/* Endpoint blokları */
+.swagger-ui .opblock {
+    background: #313244;
+    border-color: #45475a;
+}
+
+.swagger-ui .opblock .opblock-summary-description {
+    color: #a6adc8;
+}
+
+/* GET / POST / PUT / DELETE rəngləri */
+.swagger-ui .opblock.opblock-get {
+    background: rgba(137, 180, 250, 0.1);
+    border-color: #89b4fa;
+}
+
+.swagger-ui .opblock.opblock-post {
+    background: rgba(166, 227, 161, 0.1);
+    border-color: #a6e3a1;
+}
+
+.swagger-ui .opblock.opblock-put {
+    background: rgba(249, 226, 175, 0.1);
+    border-color: #f9e2af;
+}
+
+.swagger-ui .opblock.opblock-delete {
+    background: rgba(243, 139, 168, 0.1);
+    border-color: #f38ba8;
+}
+
+/* Sxem/model adları */
+.swagger-ui .model-title,
+.swagger-ui table thead tr td,
+.swagger-ui table thead tr th {
+    color: #cdd6f4;
+}
+
+/* Authorize düyməsi */
+.swagger-ui .btn.authorize {
+    background-color: #a6e3a1;
+    border-color: #a6e3a1;
+    color: #11111b;
+}
