@@ -1,11 +1,9 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Tagim.Application.Features.Profile.Commands.AddSocialLink;
 using Tagim.Application.Features.Profile.Commands.UpdateProfile;
 using Tagim.Application.Features.Profile.Commands.UploadProfileImage;
-using Tagim.Application.Features.Profile.Commands.UploadSocialLink;
 using Tagim.Application.Features.Profile.Queries.GetProfile;
 
 namespace Tagim.Api.Controllers

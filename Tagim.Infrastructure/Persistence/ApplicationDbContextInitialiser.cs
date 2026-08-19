@@ -52,7 +52,7 @@ public class ApplicationDbContextInitializer(
                 IsDeleted = false,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin123!"),
             };
-            
+
             await context.Users.AddAsync(admin);
             await context.SaveChangesAsync();
         }

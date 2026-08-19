@@ -16,8 +16,10 @@ public class CreateVehicleCommandHandler(
     {
         var userId = currentUserService.GetUserIdOrThrow();
         
+        var normalizedPlate = request.LicensePlate.Trim().ToUpperInvariant();
+        
         var exists = await context.Vehicles
-            .AnyAsync(v => v.LicensePlate.ToLower() == request.LicensePlate.ToLower(), cancellationToken);
+            .AnyAsync(v => v.LicensePlate == normalizedPlate, cancellationToken);
 
         if (exists)
         {

@@ -28,6 +28,8 @@
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - elastic
         
   elasticsearch:
     container_name: elasticsearch
@@ -51,7 +53,7 @@
     depends_on:
       - elasticsearch
     environment:
-      - ELASTICSEARCH_URL=http://localhost:9200
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
     networks:
       - elastic
   

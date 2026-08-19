@@ -23,10 +23,10 @@ public class EmailService(IOptions<EmailSettings> emailSettings) : IEmailService
         email.Body = builder.ToMessageBody();
 
         using var smtp = new SmtpClient();
-        
+
         // To pass SSL certificate verification (for development environment)
         smtp.CheckCertificateRevocation = false;
-        
+
         await smtp.ConnectAsync(_emailSettings.SmtpServer, _emailSettings.Port, SecureSocketOptions.StartTls);
         await smtp.AuthenticateAsync(_emailSettings.SenderEmail, _emailSettings.Password);
         await smtp.SendAsync(email);

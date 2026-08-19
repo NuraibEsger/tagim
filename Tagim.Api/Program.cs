@@ -2,7 +2,6 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
-using Scalar.AspNetCore;
 using Serilog;
 using Serilog.Events;
 using Tagim.Api.Middleware;
@@ -84,18 +83,28 @@ public abstract class Program
                     ClockSkew = TimeSpan.Zero
                 };
             });
-        // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-        builder.Services.AddOpenApi(options =>
+
+        // Swagger / OpenAPI
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen(options =>
         {
-            options.AddDocumentTransformer((document, context, cancellationToken) =>
+            options.SwaggerDoc("v1", new OpenApiInfo
             {
-                document.Components ??= new OpenApiComponents();
-                document.Servers = new List<OpenApiServer>
-                {
-                    new OpenApiServer { Url = "http://localhost:8080", Description = "Local Development Server" }
-                };
-                
-                return Task.CompletedTask;
+                Title = "Tagim API",
+                Version = "v1"
+            });
+
+            options.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
+            {
+                Type = SecuritySchemeType.Http,
+                Scheme = "bearer",
+                BearerFormat = "JWT",
+                Description = "JWT Authorization header. Sadəcə tokeni yazın, \"Bearer \" prefiksi lazım deyil."
+            });
+
+            options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+            {
+                [new OpenApiSecuritySchemeReference("bearer", document)] = []
             });
         });
         
@@ -128,11 +137,11 @@ public abstract class Program
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
-            app.MapOpenApi();
-            app.MapScalarApiReference(options =>
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
             {
-                options.WithTitle("Tagim API")
-                    .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Tagim API v1");
+                options.RoutePrefix = "swagger"; // https://localhost:xxxx/swagger
             });
         }
     

@@ -1,4 +1,5 @@
 using FluentValidation;
+using Tagim.Application.Extensions;
 
 namespace Tagim.Application.Features.Vehicles.Commands.CreateVehicle;
 
@@ -8,7 +9,7 @@ public class CreateVehicleCommandValidator  : AbstractValidator<CreateVehicleCom
     {
         RuleFor(x => x.LicensePlate)
             .NotEmpty().WithMessage("Dövlət nömrə nişanı vacibdir.")
-            .Matches(@"^[0-9]{2}[- ]?[A-Za-z]{2}[- ]?[0-9]{3}$")
+            .Must(LicensePlatePatterns.IsValid)
             .WithMessage("Nömrə formatı düzgün deyil (Məs: 90-AZ-100).");
 
         RuleFor(x => x.Make)
@@ -19,12 +20,11 @@ public class CreateVehicleCommandValidator  : AbstractValidator<CreateVehicleCom
             .NotEmpty().WithMessage("Model qeyd olunmalıdır.")
             .MaximumLength(50).WithMessage("Model adı çox uzundur.");
         
-        
         RuleFor(x => x.Color)
             .NotEmpty().WithMessage("Rəng qeyd olunmalıdır.")
             .MaximumLength(50).WithMessage(("Rəng adı çox uzundur."));
             
-        RuleFor(x => x.ContactNumber.Trim())
+        RuleFor(x => x.ContactNumber)
             .NotEmpty().WithMessage("Telefon nömrəsi daxil edilməlidir.")
             .Matches(@"^(\+994|994|0)(50|51|55|60|70|77|99)[0-9]{7}$")
             .WithMessage("Düzgün Azərbaycan nömrəsi daxil edin (məs: 0501234567).");

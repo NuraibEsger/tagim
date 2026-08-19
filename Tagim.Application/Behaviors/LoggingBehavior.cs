@@ -8,8 +8,6 @@ public class LoggingBehavior<TRequest, TResponse>(ILogger<LoggingBehavior<TReque
     IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {
-    private readonly ILogger<LoggingBehavior<TRequest, TResponse>> _logger = logger;
-
     public async Task<TResponse> Handle(
         TRequest request,
         RequestHandlerDelegate<TResponse> next,
@@ -17,7 +15,7 @@ public class LoggingBehavior<TRequest, TResponse>(ILogger<LoggingBehavior<TReque
     {
         var requestName = typeof(TRequest).Name;
         
-        _logger.LogInformation("Handling {RequestName} {@Request}", requestName, request);
+        logger.LogInformation("Handling {RequestName} {@Request}", requestName, request);
         
         var stopwatch = Stopwatch.StartNew();
 
@@ -26,7 +24,7 @@ public class LoggingBehavior<TRequest, TResponse>(ILogger<LoggingBehavior<TReque
             var response = await next();
             stopwatch.Stop();
             
-            _logger.LogInformation(
+            logger.LogInformation(
                 "Handled {RequestName} in {ElapsedMs}ms", 
                 requestName, stopwatch.ElapsedMilliseconds);
             
@@ -35,7 +33,7 @@ public class LoggingBehavior<TRequest, TResponse>(ILogger<LoggingBehavior<TReque
         catch (Exception ex)
         {
             stopwatch.Stop();
-            _logger.LogError(ex,
+            logger.LogError(ex,
                 "Error handling {RequestName} after {ElapsedMs}ms",
                 requestName, stopwatch.ElapsedMilliseconds);
             throw;

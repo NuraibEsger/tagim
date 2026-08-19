@@ -12,21 +12,21 @@ public static class InfrastructureServiceRegistration
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddDbContext<ApplicationDbContext>(options => 
+        services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
-        
+
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
-        
+
         services.AddScoped<ITokenService, JwtTokenService>();
 
         services.AddSingleton<ITagGeneratorService, TagGeneratorService>();
-        
+
         services.AddTransient<IEmailService, EmailService>();
-        
+
         services.AddScoped<IFileStorageService, LocalFileStorageService>();
 
         services.AddScoped<ApplicationDbContextInitializer>();
-        
+
         return services;
     }
 }

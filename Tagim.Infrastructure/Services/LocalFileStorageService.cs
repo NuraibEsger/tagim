@@ -9,10 +9,10 @@ public class LocalFileStorageService(IWebHostEnvironment env) : IFileStorageServ
     public async Task<string> SaveFileAsync(IFormFile file, string folderName)
     {
         var uploadPath = Path.Combine(env.WebRootPath, "uploads", folderName);
-        
+
         if (!Directory.Exists(uploadPath))
             Directory.CreateDirectory(uploadPath);
-        
+
         var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
         var fullPath = Path.Combine(uploadPath, fileName);
 
@@ -20,7 +20,7 @@ public class LocalFileStorageService(IWebHostEnvironment env) : IFileStorageServ
         {
             await file.CopyToAsync(stream);
         }
-        
+
         return $"/uploads/{folderName}/{fileName}";
     }
 

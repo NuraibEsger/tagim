@@ -9,10 +9,10 @@ namespace Tagim.Infrastructure.Persistence;
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) :
     DbContext(options), IApplicationDbContext
 {
-    public DbSet<Vehicle> Vehicles { get; set; }
-    public DbSet<User> Users { get; set; }
-    public DbSet<Tag> Tags { get; set; }
-    public DbSet<SocialMediaLink> SocialMediaLinks { get; set; }
+    public DbSet<Vehicle>? Vehicles { get; set; }
+    public DbSet<User>? Users { get; set; }
+    public DbSet<Tag>? Tags { get; set; }
+    public DbSet<SocialMediaLink>? SocialMediaLinks { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -25,7 +25,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 modelBuilder.Entity(entityType.ClrType).AddQueryFilterToAll();
             }
         }
-        
+
         base.OnModelCreating(modelBuilder);
     }
 
@@ -40,7 +40,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                     entry.Entity.IsDeleted = true;
                     entry.Entity.DeletedAt = DateTime.UtcNow;
                     break;
-                
+
                 case EntityState.Added:
                     entry.Entity.CreatedAt = DateTime.UtcNow;
                     break;
