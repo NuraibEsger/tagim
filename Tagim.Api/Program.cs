@@ -22,13 +22,13 @@ public abstract class Program
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
             .CreateBootstrapLogger();
-
-
+        
+        
         Log.Information("Starting up...");
-
+        
         var builder = WebApplication.CreateBuilder(args);
         var environment = builder.Environment.EnvironmentName;
-
+        
         builder.Host.UseSerilog((context, services, loggerConfig) =>
         {
             loggerConfig
@@ -44,17 +44,17 @@ public abstract class Program
 
         // Add services to the container.
         builder.Services.AddHttpContextAccessor();
-
+        
         builder.Services.AddAuthorization();
-
+        
         builder.Services.AddControllers();
-
+        
         builder.Services.AddProblemDetails();
         builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-
+        
         // AutoMapper
         builder.Services.AddAutoMapper(typeof(VehicleProfile));
-
+        
         builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
         builder.Services.AddInfrastructureServices(builder.Configuration);
         builder.Services.AddApplicationServices();
@@ -83,41 +83,31 @@ public abstract class Program
                     ClockSkew = TimeSpan.Zero
                 };
             });
-        // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-        builder.Services.AddOpenApi(options =>
+
+        // Swagger / OpenAPI
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen(options =>
         {
-            options.AddDocumentTransformer((document, context, cancellationToken) =>
+            options.SwaggerDoc("v1", new OpenApiInfo
             {
-                document.Components ??= new OpenApiComponents();
-                document.Servers = new List<OpenApiServer>
-                {
-                    new OpenApiServer { Url = "http://localhost:8080", Description = "Local Development Server" },
-                    new OpenApiServer { Url = "http://localhost:7284", Description = "Local Development Server" },
-                };
+                Title = "Tagim API",
+                Version = "v1"
+            });
 
-                document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
-                document.Components.SecuritySchemes["Bearer"] = new OpenApiSecurityScheme
-                {
-                    Type = SecuritySchemeType.Http,
-                    Scheme = "bearer",
-                    BearerFormat = "JWT",
-                    In = ParameterLocation.Header,
-                    Description = "JWT Authorization header using the Bearer scheme.",
-                };
+            options.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
+            {
+                Type = SecuritySchemeType.Http,
+                Scheme = "bearer",
+                BearerFormat = "JWT",
+                Description = "JWT Authorization header. Sadəcə tokeni yazın, \"Bearer \" prefiksi lazım deyil."
+            });
 
-                foreach (var operation in document.Paths.Values.SelectMany(path => path.Operations))
-                {
-                    operation.Value.Security ??= new List<OpenApiSecurityRequirement>();
-                    operation.Value.Security.Add(new OpenApiSecurityRequirement
-                    {
-                        [new OpenApiSecuritySchemeReference("Bearer", document)] = []
-                    });
-                }
-
-                return Task.CompletedTask;
+            options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+            {
+                [new OpenApiSecuritySchemeReference("bearer", document)] = []
             });
         });
-
+        
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("AllowAll", policy =>
@@ -129,9 +119,9 @@ public abstract class Program
         });
 
         builder.Services.AddScoped<ApplicationDbContext>();
-
+        
         var app = builder.Build();
-
+        
         app.UseSerilogRequestLogging(options =>
         {
             options.MessageTemplate = "HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms";
@@ -147,40 +137,37 @@ public abstract class Program
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
-            app.MapOpenApi();
-
+            app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/openapi/v1.json", "Tagim API v1");
-                options.RoutePrefix = "swagger";
-                options.InjectStylesheet("/swagger-ui/custom-swagger.css");
-                options.DocumentTitle = "Tagim API Docs";
-                options.DefaultModelsExpandDepth(-1);
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Tagim API v1");
+                options.RoutePrefix = "swagger"; // https://localhost:xxxx/swagger
             });
         }
-
+    
+        
         app.UseExceptionHandler();
-
+        
         //app.UseHttpsRedirection();
-
+        
         app.UseStaticFiles();
-
+        
         app.UseRouting();
-
+        
         app.UseCors("AllowAll");
-
+        
         app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();
-
+        
         await using (var scope = app.Services.CreateAsyncScope())
         {
             var initializer = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitializer>();
             await initializer.InitializeAsync();
             await initializer.SeedAsync();
         }
-
+        
         await app.RunAsync();
     }
 }
