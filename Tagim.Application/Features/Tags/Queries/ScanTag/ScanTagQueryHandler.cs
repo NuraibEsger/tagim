@@ -25,16 +25,16 @@ public class ScanTagQueryHandler(IApplicationDbContext context) : IRequestHandle
                 UniqueCode = request.UniqueCode
             };
         }
-        
+
         if (!tag.IsActive || tag.Vehicle == null)
         {
-            return new ScanTagResponseDto 
-            { 
-                Status = TagScanStatus.ReadyToActivate, 
-                UniqueCode = tag.UniqueCode 
+            return new ScanTagResponseDto
+            {
+                Status = TagScanStatus.ReadyToActivate,
+                UniqueCode = tag.UniqueCode
             };
         }
-        
+
         var socialLinks = tag.Vehicle.User.SocialMediaLinks?
             .Where(s => s.IsVisible)
             .Select(s => new SocialMediaDto(s.Id, s.PlatformName, s.Url, true))
@@ -48,9 +48,9 @@ public class ScanTagQueryHandler(IApplicationDbContext context) : IRequestHandle
             socialLinks
         );
 
-        return new ScanTagResponseDto 
-        { 
-            Status = TagScanStatus.Active, 
+        return new ScanTagResponseDto
+        {
+            Status = TagScanStatus.Active,
             UniqueCode = tag.UniqueCode,
             VehiclePublicId = tag.Vehicle.PublicId,
             VehicleData = vehicleData

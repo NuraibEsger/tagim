@@ -14,6 +14,6 @@ public class LoginUserCommandValidator : AbstractValidator<LoginUserCommand>
         // 2. Şifrə yoxlanışı (Sərt qaydalar YOXDUR, sadəcə boş olmaması yoxlanılır)
         RuleFor(p => p.Password)
             .NotEmpty().WithMessage("Şifrə daxil edilməlidir.")
-            .MaximumLength(100).WithMessage("Şifrə çox uzundur."); 
+            .MaximumLength(100).WithMessage("Şifrə çox uzundur.");
     }
 }

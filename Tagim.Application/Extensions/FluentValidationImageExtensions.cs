@@ -6,7 +6,7 @@ namespace Tagim.Application.Extensions;
 public static class FluentValidationImageExtensions
 {
     private const int MaxFileSize = 5 * 1024 * 1024;
-    
+
     private static readonly string[] AllowedContentTypes = { "image/jpeg", "image/jpg", "image/png" };
 
     public static IRuleBuilderOptions<T, IFormFile> IsValidImage<T>(this IRuleBuilder<T, IFormFile> ruleBuilder)

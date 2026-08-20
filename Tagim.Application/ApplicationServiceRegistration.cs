@@ -11,20 +11,20 @@ public static class ApplicationServiceRegistration
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
         var assembly = Assembly.GetExecutingAssembly();
-        
+
         // 1. MediatR
         services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssembly(assembly!);
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
         });
-        
+
         // 2. FluentValidation
         services.AddValidatorsFromAssembly(assembly);
-        
+
         // 4. Pipeline Behavior
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-            
+
         return services;
     }
 }

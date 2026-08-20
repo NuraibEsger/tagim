@@ -19,10 +19,10 @@ namespace Tagim.Api.Controllers
         public async Task<IActionResult> GetProfile()
         {
             var result = await mediator.Send(new GetProfileQuery());
-            
+
             return Ok(result);
         }
-        
+
         [HttpPost("social-links")]
         public async Task<IActionResult> AddSocialLink([FromBody] AddSocialLinkCommand command)
         {

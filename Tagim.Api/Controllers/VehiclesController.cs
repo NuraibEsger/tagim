@@ -43,14 +43,14 @@ namespace Tagim.Api.Controllers
             var path = await mediator.Send(command);
             return Ok(new { ImageUrl = path });
         }
-        
+
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] UpdateVehicleCommand command)
         {
             await mediator.Send(command);
             return Ok(new { Message = "Avtomobil məlumatları yeniləndi!" });
         }
-        
+
         [HttpGet("vehicle/{publicId}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetVehicleByPublicId(Guid publicId)
@@ -64,7 +64,7 @@ namespace Tagim.Api.Controllers
         {
             var command = new DeleteVehicleCommand(id);
             var vehicle = await mediator.Send(command);
-            return Ok(new { Message = "Avtomobil məlumatları uğurla silindi."});
+            return Ok(new { Message = "Avtomobil məlumatları uğurla silindi." });
         }
     }
 }

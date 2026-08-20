@@ -15,7 +15,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
         {
             Instance = httpContext.Request.Path,
         };
-        
+
         // 1. FluentValidation
         if (exception is ValidationException validationException)
         {
@@ -23,7 +23,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
             problemDetails.Title = "Validasiya Xətası";
             problemDetails.Status = StatusCodes.Status400BadRequest;
             problemDetails.Detail = "Göndərilən məlumatlarda səhv var.";
-                
+
             problemDetails.Extensions["errors"] = validationException.Errors
                 .Select(e => new { Field = e.PropertyName, Error = e.ErrorMessage })
                 .ToList();
@@ -35,7 +35,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
             problemDetails.Status = StatusCodes.Status404NotFound;
             problemDetails.Detail = notFoundException.Message;
         }
-        else if (exception is UnauthorizedAccessException  unauthorizedAccessException)
+        else if (exception is UnauthorizedAccessException unauthorizedAccessException)
         {
             httpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
             problemDetails.Title = "Giriş Qadağandır";
@@ -50,9 +50,9 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
             problemDetails.Status = StatusCodes.Status500InternalServerError;
             problemDetails.Detail = exception.Message;
         }
-        
+
         await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
-        
+
         return true;
     }
 }

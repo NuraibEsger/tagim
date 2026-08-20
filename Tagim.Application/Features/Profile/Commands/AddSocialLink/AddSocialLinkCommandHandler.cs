@@ -19,10 +19,10 @@ public class AddSocialLinkCommandHandler(IApplicationDbContext context, ICurrent
             Url = request.Url,
             IsVisible = true
         };
-        
+
         context.SocialMediaLinks.Add(link);
         await context.SaveChangesAsync(cancellationToken);
-        
+
         return link.Id;
     }
 }

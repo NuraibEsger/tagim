@@ -3,7 +3,7 @@ using Tagim.Application.DTOs;
 
 namespace Tagim.Application.Features.Profile.Commands.UploadSocialLink;
 
-public class SocialMediaDtoValidator  : AbstractValidator<SocialMediaDto>
+public class SocialMediaDtoValidator : AbstractValidator<SocialMediaDto>
 {
     public SocialMediaDtoValidator()
     {
@@ -18,7 +18,7 @@ public class SocialMediaDtoValidator  : AbstractValidator<SocialMediaDto>
             .MaximumLength(500).WithMessage("URL çox uzundur (Maksimum 500 simvol).")
             .Must(BeAValidUrl).WithMessage("Zəhmət olmasa, düzgün bir veb ünvanı daxil edin (məs: https://instagram.com/adiniz).");
     }
-    
+
     // URL-in həqiqətən keçərli olub-olmadığını yoxlayan xüsusi metod
     private bool BeAValidUrl(string url)
     {
@@ -26,15 +26,15 @@ public class SocialMediaDtoValidator  : AbstractValidator<SocialMediaDto>
 
         // 1. Uri kimi formatı düzgündürmü?
         bool isValidUrl = Uri.TryCreate(url, UriKind.Absolute, out var outUri);
-        
+
         if (!isValidUrl) return false;
-        
+
         // 2. HTTP/HTTPS dirmi?
         bool isHttpOrHttps = outUri.Scheme == Uri.UriSchemeHttp || outUri.Scheme == Uri.UriSchemeHttps;
-        
+
         // 3. ƏN VACİBİ: Host adında nöqtə varmı? (Məsələn, "example" -> false, "example.com" -> true)
-        bool hasDomainExtension = outUri.Host.Contains('.'); 
-        
-        return  isHttpOrHttps && hasDomainExtension;
+        bool hasDomainExtension = outUri.Host.Contains('.');
+
+        return isHttpOrHttps && hasDomainExtension;
     }
 }

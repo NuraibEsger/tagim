@@ -16,7 +16,7 @@ public class UploadVehicleImageCommandHandler(IApplicationDbContext context, ICu
             v => v.Id == request.VehicleId && v.UserId == userId, cancellationToken);
 
         if (vehicle == null) throw new NotFoundException("Maşın tapılmadı");
-        
+
         if (!string.IsNullOrEmpty(vehicle.VehicleImageUrl))
         {
             fileStorageService.DeleteFile(vehicle.VehicleImageUrl);
@@ -26,12 +26,12 @@ public class UploadVehicleImageCommandHandler(IApplicationDbContext context, ICu
         {
             return "File boşdur";
         }
-        
+
         var imageUrl = await fileStorageService.SaveFileAsync(request.File, "vehicles");
-        
+
         vehicle.VehicleImageUrl = imageUrl;
         await context.SaveChangesAsync(cancellationToken);
-        
+
         return imageUrl;
     }
 }

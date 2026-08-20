@@ -31,9 +31,9 @@ public class ForgotPasswordCommandHandler(IApplicationDbContext context, IEmailS
                 <br/>
                 <p>Hörmətlə, <b>Tagim Komandası</b></p>
         ";
-        
+
         await emailService.SendEmailAsync(user.Email, "Şifrənin Bərpası", emailBody);
-        
+
         return "Əgər bu email sistemdə varsa, bərpa kodu göndərildi.";
     }
 }

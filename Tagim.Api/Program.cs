@@ -22,13 +22,13 @@ public abstract class Program
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
             .CreateBootstrapLogger();
-        
-        
+
+
         Log.Information("Starting up...");
-        
+
         var builder = WebApplication.CreateBuilder(args);
         var environment = builder.Environment.EnvironmentName;
-        
+
         builder.Host.UseSerilog((context, services, loggerConfig) =>
         {
             loggerConfig
@@ -44,17 +44,17 @@ public abstract class Program
 
         // Add services to the container.
         builder.Services.AddHttpContextAccessor();
-        
+
         builder.Services.AddAuthorization();
-        
+
         builder.Services.AddControllers();
-        
+
         builder.Services.AddProblemDetails();
         builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-        
+
         // AutoMapper
         builder.Services.AddAutoMapper(typeof(VehicleProfile));
-        
+
         builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
         builder.Services.AddInfrastructureServices(builder.Configuration);
         builder.Services.AddApplicationServices();
@@ -113,11 +113,11 @@ public abstract class Program
                         [new OpenApiSecuritySchemeReference("Bearer", document)] = []
                     });
                 }
-                
+
                 return Task.CompletedTask;
             });
         });
-        
+
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("AllowAll", policy =>
@@ -129,9 +129,9 @@ public abstract class Program
         });
 
         builder.Services.AddScoped<ApplicationDbContext>();
-        
+
         var app = builder.Build();
-        
+
         app.UseSerilogRequestLogging(options =>
         {
             options.MessageTemplate = "HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms";
@@ -158,29 +158,29 @@ public abstract class Program
                 options.DefaultModelsExpandDepth(-1);
             });
         }
-        
+
         app.UseExceptionHandler();
-        
+
         //app.UseHttpsRedirection();
-        
+
         app.UseStaticFiles();
-        
+
         app.UseRouting();
-        
+
         app.UseCors("AllowAll");
-        
+
         app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();
-        
+
         await using (var scope = app.Services.CreateAsyncScope())
         {
             var initializer = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitializer>();
             await initializer.InitializeAsync();
             await initializer.SeedAsync();
         }
-        
+
         await app.RunAsync();
     }
 }

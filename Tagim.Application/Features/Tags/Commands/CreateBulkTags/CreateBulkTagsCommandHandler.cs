@@ -5,7 +5,7 @@ using Tagim.Domain.Common;
 namespace Tagim.Application.Features.Tags.Commands.CreateBulkTags;
 
 public class CreateBulkTagsCommandHandler(
-    IApplicationDbContext context, 
+    IApplicationDbContext context,
     ITagGeneratorService tagGenerator) : IRequestHandler<CreateBulkTagsCommand, int>
 {
     public async Task<int> Handle(CreateBulkTagsCommand request, CancellationToken cancellationToken)
@@ -16,13 +16,13 @@ public class CreateBulkTagsCommandHandler(
         {
             newTags.Add(new Tag
             {
-                UniqueCode = tagGenerator.GenerateTags(), 
-                IsActive = false,                  
-                VehicleId = null,                
+                UniqueCode = tagGenerator.GenerateTags(),
+                IsActive = false,
+                VehicleId = null,
                 CreatedAt = DateTime.UtcNow
             });
         }
-        
+
         await context.Tags.AddRangeAsync(newTags, cancellationToken);
         await context.SaveChangesAsync(cancellationToken);
 

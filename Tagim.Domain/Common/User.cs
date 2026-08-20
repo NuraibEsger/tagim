@@ -12,5 +12,5 @@ public class User : BaseEntity
     public string? PasswordResetToken { get; set; }
     public DateTime? PasswordResetTokenExpires { get; set; }
     public UserRole Role { get; set; } = UserRole.User;
-    public ICollection<SocialMediaLink>?  SocialMediaLinks { get; set; } = new List<SocialMediaLink>();
+    public ICollection<SocialMediaLink>? SocialMediaLinks { get; set; } = new List<SocialMediaLink>();
 }

@@ -9,12 +9,12 @@ public class RegisterUserCommandHandler(IApplicationDbContext context) : IReques
 {
     public async Task<int> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-        var exists = await context.Users.AnyAsync(u => 
+        var exists = await context.Users.AnyAsync(u =>
             u.Email == request.Email || u.PhoneNumber == request.PhoneNumber, cancellationToken);
-        
+
         if (exists)
             throw new Exception("Bu istifadəçi artıq mövcuddur.");
-        
+
         var passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
 
         var user = new User
@@ -24,10 +24,10 @@ public class RegisterUserCommandHandler(IApplicationDbContext context) : IReques
             PhoneNumber = request.PhoneNumber,
             PasswordHash = passwordHash,
         };
-        
+
         context.Users.Add(user);
         await context.SaveChangesAsync(cancellationToken);
-        
+
         return user.Id;
     }
 }

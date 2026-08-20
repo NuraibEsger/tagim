@@ -25,7 +25,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 modelBuilder.Entity(entityType.ClrType).AddQueryFilterToAll();
             }
         }
-        
+
         base.OnModelCreating(modelBuilder);
     }
 
@@ -40,7 +40,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                     entry.Entity.IsDeleted = true;
                     entry.Entity.DeletedAt = DateTime.UtcNow;
                     break;
-                
+
                 case EntityState.Added:
                     entry.Entity.CreatedAt = DateTime.UtcNow;
                     break;

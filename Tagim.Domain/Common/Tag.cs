@@ -1,4 +1,5 @@
 namespace Tagim.Domain.Common;
+
 public class Tag : BaseEntity
 {
     public string UniqueCode { get; set; } = string.Empty;

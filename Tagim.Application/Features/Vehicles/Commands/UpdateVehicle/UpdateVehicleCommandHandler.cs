@@ -13,18 +13,18 @@ public class UpdateVehicleCommandHandler(IApplicationDbContext context, ICurrent
     public async Task<Unit> Handle(UpdateVehicleCommand request, CancellationToken cancellationToken)
     {
         var userId = currentUserService.GetUserIdOrThrow();
-        
+
         var vehicle = await context.Vehicles
             .FirstOrDefaultAsync(v => v.Id == request.Id && v.UserId == userId, cancellationToken);
-        
-        if (vehicle == null) throw new NotFoundException("Avtomobil",  request.Id);
-        
+
+        if (vehicle == null) throw new NotFoundException("Avtomobil", request.Id);
+
         mapper.Map(request, vehicle);
-        
+
         vehicle.UpdatedAt = DateTime.UtcNow;
-        
+
         await context.SaveChangesAsync(cancellationToken);
-        
+
         return Unit.Value;
     }
 }

@@ -35,7 +35,7 @@ namespace Tagim.Api.Controllers
             var result = await mediator.Send(new GetTagByCodeQuery(code));
             return Ok(result);
         }
-        
+
         [HttpGet("scan/{code}")]
         public async Task<IActionResult> Scan(string code)
         {

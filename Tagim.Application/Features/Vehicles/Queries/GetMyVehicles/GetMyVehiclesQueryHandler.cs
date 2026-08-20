@@ -23,7 +23,7 @@ public class GetMyVehiclesQueryHandler(IApplicationDbContext context, ICurrentUs
             .OrderByDescending(v => v.CreatedAt)
             .ProjectTo<VehicleDto>(mapper.ConfigurationProvider)
             .ToListAsync(cancellationToken);
-        
+
         return vehicles;
     }
 }

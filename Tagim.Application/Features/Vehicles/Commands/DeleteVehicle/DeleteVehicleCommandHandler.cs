@@ -22,8 +22,8 @@ public class DeleteVehicleCommandHandler(IApplicationDbContext context, ICurrent
 
         if (associatedTag != null)
         {
-            associatedTag.VehicleId = null; 
-            associatedTag.IsActive = false; 
+            associatedTag.VehicleId = null;
+            associatedTag.IsActive = false;
         }
 
         context.Vehicles.Remove(vehicle);

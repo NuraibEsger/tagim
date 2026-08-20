@@ -20,9 +20,9 @@ public class GetPublicVehicleQueryHandler(IApplicationDbContext context, IMapper
             .ThenInclude(v => v.SocialMediaLinks)
             .ProjectTo<PublicVehicleDto>(mapper.ConfigurationProvider)
             .FirstOrDefaultAsync(v => v.PublicId == request.PublicId, cancellationToken);
-        
+
         if (vehicle == null) throw new NotFoundException("Avtomobil tapılmadı.");
-        
+
         return vehicle;
     }
 }

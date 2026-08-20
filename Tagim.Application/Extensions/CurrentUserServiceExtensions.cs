@@ -10,7 +10,7 @@ public static class CurrentUserServiceExtensions
         {
             throw new UnauthorizedAccessException("Bu əməliyyat üçün giriş etməlisiniz.");
         }
-        
+
         return service.UserId.Value;
     }
 }

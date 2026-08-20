@@ -16,17 +16,17 @@ public class GetMyVehicleByIdQueryHandler(IApplicationDbContext context, ICurren
     public async Task<VehicleDto> Handle(GetMyVehicleByIdQuery request, CancellationToken cancellationToken)
     {
         var userId = currentUserService.GetUserIdOrThrow();
-        
+
         var vehicle = await context.Vehicles
             .AsNoTracking()
             .Include(v => v.User)
             .ThenInclude(u => u.SocialMediaLinks)
             .ProjectTo<VehicleDto>(mapper.ConfigurationProvider)
-            .FirstOrDefaultAsync(v => v.Id == request.Id && v.UserId == userId,  cancellationToken);
-        
+            .FirstOrDefaultAsync(v => v.Id == request.Id && v.UserId == userId, cancellationToken);
+
         if (vehicle == null)
             throw new NotFoundException("Avtomobil tapılmadı.");
-        
-        return  vehicle;
+
+        return vehicle;
     }
 }

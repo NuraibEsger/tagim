@@ -5,4 +5,4 @@ public record ScanResultDto(
     string CarDescription,
     string OwnerName,
     string ContactNumber,
-    IEnumerable<SocialMediaDto>? SocialLinks); 
+    IEnumerable<SocialMediaDto>? SocialLinks);

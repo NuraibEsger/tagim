@@ -15,7 +15,7 @@ public class CurrentUserService(IHttpContextAccessor httpContextAccessor) : ICur
             {
                 return userId;
             }
-            
+
             return null;
         }
     }

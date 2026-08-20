@@ -11,16 +11,16 @@ public class VehicleProfile : Profile
     public VehicleProfile()
     {
         CreateMap<Vehicle, VehicleDto>()
-            .ForMember(dest => dest.SocialMedia, 
+            .ForMember(dest => dest.SocialMedia,
                 opt => opt.MapFrom(src => src.User.SocialMediaLinks!.Where(x => x.IsVisible)));
         CreateMap<Vehicle, PublicVehicleDto>()
-            .ForMember(dest => dest.SocialMediaLinks, 
+            .ForMember(dest => dest.SocialMediaLinks,
                 opt => opt.MapFrom(src => src.User.SocialMediaLinks!.Where(x => x.IsVisible)));
         CreateMap<CreateVehicleCommand, Vehicle>()
             .ForMember(v => v.LicensePlate,
                 opt => opt.MapFrom(v => v.LicensePlate.ToUpper()));
         CreateMap<UpdateVehicleCommand, Vehicle>()
-            .ForMember(v => v.LicensePlate, 
+            .ForMember(v => v.LicensePlate,
                 opt => opt.MapFrom(v => v.LicensePlate.ToUpper()));
     }
 }

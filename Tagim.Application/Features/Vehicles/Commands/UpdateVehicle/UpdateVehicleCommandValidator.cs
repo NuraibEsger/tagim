@@ -16,16 +16,16 @@ public class UpdateVehicleCommandValidator : AbstractValidator<UpdateVehicleComm
         RuleFor(x => x.Make)
             .NotEmpty().WithMessage("Marka qeyd olunmalıdır.")
             .MaximumLength(50).WithMessage("Marka adı çox uzundur.");
-        
+
         RuleFor(x => x.Model)
             .NotEmpty().WithMessage("Model qeyd olunmalıdır.")
             .MaximumLength(50).WithMessage("Model adı çox uzundur.");
-        
-        
+
+
         RuleFor(x => x.Color)
             .NotEmpty().WithMessage("Rəng qeyd olunmalıdır.")
             .MaximumLength(50).WithMessage(("Rəng adı çox uzundur."));
-            
+
         RuleFor(x => x.ContactNumber.Trim())
             .NotEmpty().WithMessage("Telefon nömrəsi daxil edilməlidir.")
             .Matches(@"^(\+994|994|0)(50|51|55|60|70|77|99)[0-9]{7}$")

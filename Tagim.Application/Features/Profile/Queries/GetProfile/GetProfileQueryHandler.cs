@@ -8,7 +8,7 @@ using Tagim.Application.Interfaces;
 
 namespace Tagim.Application.Features.Profile.Queries.GetProfile;
 
-public class GetProfileQueryHandler(ICurrentUserService currentUserService, IMapper mapper, IApplicationDbContext context) 
+public class GetProfileQueryHandler(ICurrentUserService currentUserService, IMapper mapper, IApplicationDbContext context)
     : IRequestHandler<GetProfileQuery, UserProfileDto>
 {
     public async Task<UserProfileDto> Handle(GetProfileQuery request, CancellationToken cancellationToken)
@@ -21,7 +21,7 @@ public class GetProfileQueryHandler(ICurrentUserService currentUserService, IMap
             .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
 
         if (user == null) throw new NotFoundException("İstifadəçi tapılmadı");
-        
+
         return mapper.Map<UserProfileDto>(user);
     }
 }

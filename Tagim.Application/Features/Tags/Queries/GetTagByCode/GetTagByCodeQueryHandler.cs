@@ -16,7 +16,7 @@ public class GetTagByCodeQueryHandler(IApplicationDbContext context) : IRequestH
             .ThenInclude(v => v!.User)
             .ThenInclude(u => u.SocialMediaLinks)
             .FirstOrDefaultAsync(t => t.UniqueCode == request.Code, cancellationToken);
-        
+
         if (tag == null)
         {
             throw new NotFoundException("QR Kod tapılmadı.");
@@ -26,9 +26,9 @@ public class GetTagByCodeQueryHandler(IApplicationDbContext context) : IRequestH
         {
             throw new NotFoundException("Bu QR kod hələ aktivləşdirilməyib.");
         }
-        
+
         var socialLinks = tag.Vehicle.User.SocialMediaLinks?
-            .Where(s => s.IsVisible) 
+            .Where(s => s.IsVisible)
             .Select(s => new SocialMediaDto(s.Id, s.PlatformName, s.Url, true))
             .ToList();
 

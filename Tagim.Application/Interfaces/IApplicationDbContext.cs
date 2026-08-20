@@ -9,6 +9,6 @@ public interface IApplicationDbContext
     DbSet<Vehicle> Vehicles { get; set; }
     DbSet<Tag> Tags { get; set; }
     DbSet<SocialMediaLink> SocialMediaLinks { get; set; }
-    
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

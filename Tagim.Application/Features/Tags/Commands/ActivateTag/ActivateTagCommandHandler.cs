@@ -12,10 +12,10 @@ public class ActivateTagCommandHandler(IApplicationDbContext context, ICurrentUs
     public async Task<bool> Handle(ActivateTagCommand request, CancellationToken cancellationToken)
     {
         var userId = currentUserService.GetUserIdOrThrow();
-        
+
         var tag = await context.Tags
             .FirstOrDefaultAsync(t => t.UniqueCode == request.UniqueCode, cancellationToken);
- 
+
         if (tag == null)
         {
             throw new NotFoundException("Yanlış kod! Belə bir stiker mövcud deyil.");
@@ -25,19 +25,19 @@ public class ActivateTagCommandHandler(IApplicationDbContext context, ICurrentUs
         {
             throw new Exception("Bu stiker artıq istifadə olunub!");
         }
-        
+
         var vehicle = await context.Vehicles
             .FirstOrDefaultAsync(v => v.PublicId == request.VehiclePublicId && v.UserId == userId, cancellationToken);
-        
+
         if (vehicle == null)
         {
             throw new NotFoundException("Maşın tapılmadı və ya sizə aid deyil.");
         }
-        
+
         tag.VehicleId = vehicle.Id;
         tag.IsActive = true;
         tag.UpdatedAt = DateTime.UtcNow;
-        
+
         await context.SaveChangesAsync(cancellationToken);
         return true;
     }

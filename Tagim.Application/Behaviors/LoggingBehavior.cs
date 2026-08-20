@@ -16,20 +16,20 @@ public class LoggingBehavior<TRequest, TResponse>(ILogger<LoggingBehavior<TReque
         CancellationToken cancellationToken)
     {
         var requestName = typeof(TRequest).Name;
-        
+
         _logger.LogInformation("Handling {RequestName} {@Request}", requestName, request);
-        
+
         var stopwatch = Stopwatch.StartNew();
 
         try
         {
             var response = await next();
             stopwatch.Stop();
-            
+
             _logger.LogInformation(
-                "Handled {RequestName} in {ElapsedMs}ms", 
+                "Handled {RequestName} in {ElapsedMs}ms",
                 requestName, stopwatch.ElapsedMilliseconds);
-            
+
             return response;
         }
         catch (Exception ex)
